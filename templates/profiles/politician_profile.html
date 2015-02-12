@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Profiles{% endblock %}
+
+{% block body_block %}
+<div class="container">
+{% if politician %}
+	
+	<h2>Poltician profile:</h2>
+	<h3>{{ politician.name }} // 
+		{% if politician.party == "R" %}
+		 	Republican
+		 {% elif politician.party == "D" %}
+		 	Democrat
+		 {% else %}
+		 	{{ politician.party }} 
+		 {% endif %} // {{ politician.district }}</h3>	
+	
+	{% if politician.notes == True and politician.notes != "n/a" %}
+		<p>Notes: {{ politician.notes }}</p>
+	{% endif %}
+
+	<p>{{ politician.chamber }} </p>
+	
+	{% if politician.chamber == "U.S. House of Representatives" %}
+		<p> House rank: {{ politician.rank }}</p>	
+	{% elif politician.chamber == "U.S. Senate"%}
+		<p> Senate class: {{ politician.rank }}</p>	
+	{% endif %}
+	
+	<img src="{{ politician.profile_pic_url }}" alt="">
+{% else %}
+	<h1>No such profile exists</h1>
+{% endif %}
+</div>
+{% endblock %}

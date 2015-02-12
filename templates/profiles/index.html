@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Profiles{% endblock %}
+
+{% block body_block %}
+	<div class="container">
+		<h1>Politician list</h1>
+	{% if pols_senate %}
+			<h3>US Senate</h3>
+		{% for pol in pols_senate %}
+		
+			<p><a href="/profiles/{{ pol.slug }}">{{pol.name}} • {{ pol.district }}</a></p>
+		{% endfor %}
+	{% endif %}
+	{% if pols_house %}
+			</br>
+			<h3>US House of Representatives</h3>
+		{% for pol in pols_house %}
+		
+			<p><a href="/profiles/{{ pol.slug }}">{{pol.name}} • {{ pol.district }}</a></p>
+		{% endfor %}
+	{% endif %}
+	</div>
+{% endblock %}
+	

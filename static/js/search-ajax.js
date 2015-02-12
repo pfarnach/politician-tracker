@@ -1,15 +1,23 @@
 $(document).ready(function(){
 	
 	// on load, create an empty list
-	var politician_list = [];
+	var politician_list = [], list_loaded=false;
 	
-	// if list is empty, go fetch it from server
-	if (politician_list.length === 0) {
-		$.get('/profiles/search_list/', function(data) {
-			politician_list = data;
-			unpack_politician_list(politician_list);
-		});
-	}
+	$(".sidebar-nav").on('mouseenter', function(){
+		
+		// if list is empty, go fetch it from server
+		if (!list_loaded) {
+			if (politician_list.length === 0) {
+				$.get('/profiles/search_list/', function(data) {
+					politician_list = data;
+					unpack_politician_list(politician_list);
+				});
+			}	
+		}
+		list_loaded=true;
+		console.log('list loaded');
+	});
+	
 
 	// Unpacks JSON list from server and makes array of objects containing politician's data
 	function unpack_politician_list(list) {

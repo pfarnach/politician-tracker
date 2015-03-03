@@ -1,4 +1,7 @@
-2/12/2015:
+## Poltician Tracker
+#### Built using Django, JS (jQuery, maybe Angular), HTML and CSS
+
+##### 2/12/2015:
 
 This is a project I'm working on to compile and display information on US politicians.  The information will draw from a number of APIs including Wikipedia, Sunlight Foundation and Open Secrets.  Who knows where this will go.  Right now I have the following done(ish):
 - Backend model for politicians
@@ -22,3 +25,7 @@ Why?
 This project is meant to shine light on our government and how they operate. We need to know what exactly our politicians are doing so as to remove any ambiguity about how they do or do not work for us, "the taxpayers". 
 
 We are what we do, not what we say we do.
+
+##### Screenshot
+![alt tag](https://raw.githubusercontent.com/pfarnach/politician-tracker/master/screenshot.png)
+

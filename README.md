@@ -11,7 +11,6 @@ Short-term goals:
 - Pull in more information from relevant APIs client side
 - Have information put into individual profile template
 - Create user accounts/authentication
-- 
 - Create some sort of evaluation system of politicians (likes/dislikes/change over time period)
 
 Long-term ideas:

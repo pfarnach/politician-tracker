@@ -9,7 +9,7 @@
 			<h3>US Senate</h3>
 		{% for pol in pols_senate %}
 		
-			<p><a href="/profiles/{{ pol.slug }}">{{pol.name}} • {{ pol.district }}</a></p>
+			<p><a href="/profiles/{{ pol.slug }}">{{pol.official_full_name}} • {{ pol.state }}</a></p>
 		{% endfor %}
 	{% endif %}
 	{% if pols_house %}
@@ -17,7 +17,7 @@
 			<h3>US House of Representatives</h3>
 		{% for pol in pols_house %}
 		
-			<p><a href="/profiles/{{ pol.slug }}">{{pol.name}} • {{ pol.district }}</a></p>
+			<p><a href="/profiles/{{ pol.slug }}">{{pol.official_full_name}} • {{ pol.state }}-{{ pol.rep_district }}</a></p>
 		{% endfor %}
 	{% endif %}
 	</div>

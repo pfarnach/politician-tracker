@@ -3,34 +3,35 @@
 {% block title %}Profiles{% endblock %}
 
 {% block body_block %}
-<div class="container">
+<div class="container" id="politician-profile">
 {% if politician %}
 	
-	<h2>Poltician profile:</h2>
-	<h3>{{ politician.name }} // 
-		{% if politician.party == "R" %}
-		 	Republican
-		 {% elif politician.party == "D" %}
-		 	Democrat
-		 {% else %}
-		 	{{ politician.party }} 
-		 {% endif %} // {{ politician.district }}</h3>	
-	
-	{% if politician.notes == True and politician.notes != "n/a" %}
-		<p>Notes: {{ politician.notes }}</p>
-	{% endif %}
+	<h1><strong>{{ politician.official_full_name }}</strong></h1>
 
-	<p>{{ politician.chamber }} </p>
-	
-	{% if politician.chamber == "U.S. House of Representatives" %}
-		<p> House rank: {{ politician.rank }}</p>	
-	{% elif politician.chamber == "U.S. Senate"%}
-		<p> Senate class: {{ politician.rank }}</p>	
+	{% if politician.chamber == "rep" %}
+		<h2>U.S. House of Representatives</h2>
+	{% elif politician.chamber == "sen"%}
+		<h2>U.S. Senate</h2>
+	{% endif %}  
+
+	<h3>
+	 {{ politician.party }} //
+	{% if politician.rep_district != None %}
+		 {{ politician.state }}-{{ politician.rep_district }}
+	{% else %}
+		{{ politician.state }}
 	{% endif %}
-	
-	<img src="{{ politician.profile_pic_url }}" alt="">
+	</h3>
+
+	{% with '/static/images/congress_portraits/225x275/'|add:politician.id_bioguide|add:'.jpg' as image_static %}
+		<img id="profile-pic" src="{{ image_static }}" />
+	{% endwith %}
+
 {% else %}
+
 	<h1>No such profile exists</h1>
+
 {% endif %}
 </div>
+
 {% endblock %}

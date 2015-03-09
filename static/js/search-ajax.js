@@ -65,10 +65,6 @@ $(document).ready(function(){
 			$("#search_results li").hide();
 		}
 	});
-
-	// politician profile image fade in when loaded inside politician_profile.html
-	$('#politician-profile #profile-pic').hide();
-	$('#politician-profile #profile-pic').delay(500).fadeIn(500);
 });
 
 

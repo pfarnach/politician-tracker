@@ -83,7 +83,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'knliqdpr',
         'USER': 'knliqdpr',
-        'PASSWORD': 'wlIVkP_2FYl8RbJxhBlUmpi4rpbcgVgC',
+        'PASSWORD': 'reDbGRD_6ZlaAVHvKHpkGAKIVsqdHTeB',
         'HOST': 'babar.elephantsql.com',
         'PORT': '5432',
     }

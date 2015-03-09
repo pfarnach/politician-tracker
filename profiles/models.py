@@ -1,5 +1,11 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+import os
+import urllib2
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+POL_IMG_DIR = os.path.join(BASE_DIR, 'static/images/congress_portraits/225x275/')
+
 
 # Create your models here.
 class Politician(models.Model):
@@ -43,3 +49,13 @@ class Politician(models.Model):
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.official_full_name)
 		super(Politician, self).save(*args, **kwargs)
+
+	def getImageURL(self):
+		self.imagePath = POL_IMG_DIR + self.id_bioguide + ".jpg"
+		return os.path.isfile(self.imagePath)
+
+
+
+
+
+

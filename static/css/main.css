@@ -1,0 +1,24 @@
+/*------------------------
+POLITICIAN PROFILE PAGE
+--------------------------*/
+
+#politician-profile .politician-name {
+	padding-left: 15px;
+}
+
+#politician-profile .subscribe-btn {
+	margin-top: 20px;
+}
+
+#politician-profile .chamber {
+	margin-top: 8px;
+}
+
+/* profile tabs */
+#politician-profile .nav-tabs {
+	margin-top: 20px;
+}
+
+#politician-profile .tab-pane p:first-child {
+	margin-top: 15px;
+}

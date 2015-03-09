@@ -3,35 +3,117 @@
 {% block title %}Profiles{% endblock %}
 
 {% block body_block %}
+
 <div class="container" id="politician-profile">
+
 {% if politician %}
 	
-	<h1><strong>{{ politician.official_full_name }}</strong></h1>
+<!-- Pol name -->
+<div class="row">
+	<div class="col-sm-10">
+		<h1 class="politician-name"><strong>{{ politician.official_full_name }}</strong></h1>
+	</div>
+	<div class="col-sm-2">
+		<a href="#" class="btn btn-danger btn-lg subscribe-btn"><i class="fa fa-eye"></i> Watch</a>
+	</div>
+</div>
 
+<!-- Picture / bio info section -->
+<div class="col-md-3">
+	<!-- Chamber (house or senate) -->
 	{% if politician.chamber == "rep" %}
-		<h2>U.S. House of Representatives</h2>
+		<h3 class="chamber">U.S. House of Reps</h3>
 	{% elif politician.chamber == "sen"%}
-		<h2>U.S. Senate</h2>
+		<h3 class="chamber">U.S. Senate</h3>
 	{% endif %}  
 
-	<h3>
-	 {{ politician.party }} //
+	<!-- State, district and party information -->
+	<h4><i class="fa fa-angle-double-right"></i>  
+	{{ politician.party }}
 	{% if politician.rep_district != None %}
-		 {{ politician.state }}-{{ politician.rep_district }}
+		 ({{ politician.state }}-{{ politician.rep_district }})
 	{% else %}
-		{{ politician.state }}
+		({{ politician.state }})
 	{% endif %}
-	</h3>
 
-	{% with '/static/images/congress_portraits/225x275/'|add:politician.id_bioguide|add:'.jpg' as image_static %}
-		<img id="profile-pic" src="{{ image_static }}" />
-	{% endwith %}
+	<!-- politician role if there is one -->
+	</h4>
+	{% if politician.role %}
+		<h4><i class="fa fa-angle-double-right"></i> {{ politician.role }}</h4>
+	{% endif %}
+
+	<!-- Displays profile pic if it exists, if not, a gender-specific placeholder image -->
+	{% if alt_profile_pic == "male" %}
+		<img id="profile-pic" src="/static/images/placeholders/placeholder-male-225x275.jpg" />
+	{% elif alt_profile_pic == "female" %}
+		<img id="profile-pic" src="/static/images/placeholders/placeholder-female-225x275.jpg" />
+	{% else %}
+		{% with '/static/images/congress_portraits/225x275/'|add:politician.id_bioguide|add:'.jpg' as image_static %}
+			<img id="profile-pic" src="{{ image_static }}" />
+		{% endwith %}	
+	{% endif %}
+
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#contact" data-toggle="tab">Contact</a></li>
+	  <li><a href="#bio" data-toggle="tab">Bio</a></li>
+	</ul>
+	<div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade active in" id="contact">
+	  	
+	  	<!-- contact info -->
+	  	<p><span><i class="fa fa-link"></i> </span><a href="{{ politician.url }}" target="_blank">Homepage</a></p>
+	  	<p><span><i class="fa fa-pencil"></i> </span><a href="{{ politician.contact_form }}" target="_blank">Contact Form</a></p>
+	  	<p><span><i class="fa fa-phone"></i> </span><a href="tel:1-{{ politician.phone }}">{{ politician.phone }}</a></p>
+
+	  	{% autoescape off %}
+	  		<p><span><i class="fa fa-envelope"></i> </span>{{ politician.address }}</p>
+	  	{% endautoescape %}
+
+	  </div>
+	  <div class="tab-pane fade" id="bio">
+
+			<!-- term end -->
+			<p>Term ends: {{ politician.term_end|date }}</p>
+
+			<!-- more bio info -->
+			<p>Age: {{ politician.age }} (b. {{ politician.birthday|date }})</p>
+
+			{% if politician.religion %}
+				<p>Religion: {{ politician.religion }}</p>
+			{% else %}
+				<p>Religion: None listed</p>
+			{% endif %}
+
+	  </div> <!-- /tab-pane -->
+	</div> <!-- /tab-content -->
+</div> <!-- col-md-3 -->
+
+<!-- Main info block -->
+<div class="col-md-9">
+	<ul class="nav nav-tabs">
+	  <li class="active"><a href="#money" data-toggle="tab">Money</a></li>
+	  <li><a href="#activity" data-toggle="tab">Political activity</a></li>
+	  <li><a href="#rss" data-toggle="tab">RSS Feed</a></li>
+	</ul>
+	<div id="myTabContent" class="tab-content">
+	  <div class="tab-pane fade active in" id="money">
+	    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+	  </div>
+	  <div class="tab-pane fade" id="activity">
+	    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+	  </div>
+	  <div class="tab-pane fade" id="rss">
+	    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+	  </div>
+	</div> <!-- /tab content -->	
+</div> <!-- col-md-9 -->
 
 {% else %}
 
 	<h1>No such profile exists</h1>
 
 {% endif %}
+
 </div>
 
 {% endblock %}

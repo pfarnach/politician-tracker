@@ -53,12 +53,28 @@
 		{% endwith %}	
 	{% endif %}
 
+	<!-- politician side-bar tabs -->
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#contact" data-toggle="tab">Contact</a></li>
 	  <li><a href="#bio" data-toggle="tab">Bio</a></li>
 	</ul>
 	<div id="myTabContent" class="tab-content">
 		<div class="tab-pane fade active in" id="contact">
+
+			<!-- social media info -->
+	  	<div class="social-media-icon-wrapper">
+		  	{% if politician.youtube_id %}
+		  		<a class="social-media-icon" href="https://www.youtube.com/user/{{ politician.youtube_id }}" target="_blank"><i class="fa fa-youtube"></i></a>	
+		  	{% endif %}
+
+		  	{% if politician.twitter_id %}
+		 			<a class="social-media-icon" href="https://twitter.com/{{ politician.twitter_id }}" target="_blank"><i class="fa fa-twitter"></i></a> 		
+		  	{% endif %}
+		  	
+		  	{% if politician.facebook_id %}
+		  		<a class="social-media-icon" href="https://www.facebook.com/{{ politician.facebook_id }}" target="_blank"><i class="fa fa-facebook-official"></i></a>
+		  	{% endif %}
+	  	</div> <!-- social-media-icon-wrapper -->
 	  	
 	  	<!-- contact info -->
 	  	<p><span><i class="fa fa-link"></i> </span><a href="{{ politician.url }}" target="_blank">Homepage</a></p>
@@ -69,7 +85,7 @@
 	  		<p><span><i class="fa fa-envelope"></i> </span>{{ politician.address }}</p>
 	  	{% endautoescape %}
 
-	  </div>
+	  </div> <!-- /tab-pane -->
 	  <div class="tab-pane fade" id="bio">
 
 			<!-- term end -->

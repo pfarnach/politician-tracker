@@ -22,3 +22,24 @@ POLITICIAN PROFILE PAGE
 #politician-profile .tab-pane p:first-child {
 	margin-top: 15px;
 }
+
+#politician-profile .tab-pane .social-media-icon-wrapper {
+	margin: 15px 0;
+}
+
+#politician-profile .tab-pane .social-media-icon {
+	margin-left: 3.8rem;
+	color: black;
+	font-size: 3rem;
+}
+
+#politician-profile .tab-pane a,
+#politician-profile .tab-pane a {
+	text-decoration: none;
+	transition: color .2s ease;
+}
+
+#politician-profile .tab-pane a:hover,
+#politician-profile .tab-pane a:focus {
+	color: #F04124;
+}

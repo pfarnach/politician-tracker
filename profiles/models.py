@@ -39,6 +39,11 @@ class Politician(models.Model):
 	role_start = models.DateField(max_length = 500, unique = False, default=None, blank=True, null=True)
 	notes = models.CharField(max_length = 500, unique = False, default=None, null=True, blank=True)
 
+	# social media
+	youtube_id = models.CharField(max_length = 500, null=True, unique = False, default=None, blank=True)
+	twitter_id = models.CharField(max_length = 500, null=True, unique = False, default=None, blank=True)
+	facebook_id = models.CharField(max_length = 500, null=True, unique = False, default=None, blank=True)
+
 	# slug
 	slug = models.SlugField(max_length = 500, unique=True)
 	

@@ -78,7 +78,9 @@
 	  	
 	  	<!-- contact info -->
 	  	<p><span><i class="fa fa-link"></i> </span><a href="{{ politician.url }}" target="_blank">Homepage</a></p>
-	  	<p><span><i class="fa fa-pencil"></i> </span><a href="{{ politician.contact_form }}" target="_blank">Contact Form</a></p>
+	  	{% if politician.contact_form %}
+	  		<p><span><i class="fa fa-pencil"></i> </span><a href="{{ politician.contact_form }}" target="_blank">Contact Form</a></p>
+	  	{% endif %}
 	  	<p><span><i class="fa fa-phone"></i> </span><a href="tel:1-{{ politician.phone }}">{{ politician.phone }}</a></p>
 
 	  	{% autoescape off %}
@@ -90,6 +92,9 @@
 
 			<!-- term end -->
 			<p>Term ends: {{ politician.term_end|date }}</p>
+
+			<!-- first elected -->
+			<p>First elected: {{ politician.first_elected|date }}</p>
 
 			<!-- more bio info -->
 			<p>Age: {{ politician.age }} (b. {{ politician.birthday|date }})</p>

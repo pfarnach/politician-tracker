@@ -27,6 +27,12 @@ class Politician(models.Model):
 	# IDs
 	id_bioguide = models.CharField(max_length = 500, unique = False, blank=False)
 	id_govtrack = models.IntegerField(max_length = 500, unique = True, default = None, blank=True, null=True)
+	id_opensecrets = models.CharField(max_length = 500, unique = True, default = None, blank=True, null=True)
+	id_lis = models.CharField(max_length = 500, unique = True, default = None, blank=True, null=True)
+	id_thomas = models.CharField(max_length = 500, unique = True, default = None, blank=True, null=True)
+	id_maplight = models.IntegerField(max_length = 500, unique = True, default = None, blank=True, null=True)
+	id_votesmart = models.IntegerField(max_length = 500, unique = True, default = None, blank=True, null=True)
+	id_fec = models.CharField(max_length = 500, unique = True, default = None, blank=True, null=True)
 
 	# congress
 	party = models.CharField(max_length = 500, unique = False, default=None, blank=True)
@@ -34,6 +40,7 @@ class Politician(models.Model):
 	chamber = models.CharField(max_length = 500, unique = False, default=None, blank=True)
 	rep_district = models.CharField(max_length = 500, null=True, unique = False, default=None, blank=True)
 	sen_class = models.CharField(max_length = 500, null=True, unique = False, default=None, blank=True)
+	first_elected = models.DateField(null=True, unique = False, default = None, blank=True)
 	term_end = models.DateField(null=True, unique = False, default = None, blank=True)
 	role = models.CharField(max_length = 500, unique = False, default=None, blank=True, null=True)
 	role_start = models.DateField(max_length = 500, unique = False, default=None, blank=True, null=True)

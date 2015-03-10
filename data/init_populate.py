@@ -35,6 +35,7 @@ for i in range(len(data)):
 	url = data[i]['terms'][-1]['url']
 	rss_url = data[i]['terms'][-1].get('rss_url')
 	term_end_date = data[i]['terms'][-1]['end']
+	first_elected = data[i]['terms'][0]['start']
 
 	rep_district = data[i]['terms'][-1].get('district')
 	sen_class =data[i]['terms'][-1].get('class')
@@ -63,6 +64,7 @@ for i in range(len(data)):
 					chamber=chamber,
 					url=url,
 					rss_url=rss_url,
+					first_elected=first_elected,
 					term_end=term_end_date,
 					rep_district=rep_district,
 					sen_class=sen_class,

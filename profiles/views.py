@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
 from django.core import serializers # for AJAX response
 
-import datetime, math
+import datetime, math, us
 
 # index of politicians
 def politician_index(request):
@@ -29,6 +29,8 @@ def politician_profile(request, politician_name_slug):
         politician.age = int(math.floor(abs((age.days) / 365.25)))
 
         politician.address = politician.address.replace(';','</br>')
+
+        politician.state = us.states.lookup(politician.state).name
 
         if not politician.getImageURL() and politician.gender == "M":
             context_dict['alt_profile_pic'] = "male"

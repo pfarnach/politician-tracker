@@ -1,0 +1,7 @@
+*.jpg
+*.yaml
+*.pyc
+*.psd
+politician_tracker/settings.py
+data/congressapi.py
+data

@@ -8,8 +8,8 @@
 
 #menu-toggle {
     position: absolute;
-    left: -22px;
-    top: 240;
+    left: -20px;
+    top: 150px;
     padding: 5px 8px;
 }
 
@@ -138,10 +138,7 @@
 }
 
 /* Sidebar results */
-/*#search_results li {
-    padding: 0;
-    margin: 0;
-}*/
+
 #search_results li a {
     color: white;
 /*    padding:0;

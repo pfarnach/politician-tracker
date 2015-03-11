@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from profiles.models import Politician
+from profiles.models import Politician, UserSubscription, UserProfile
 # from profiles.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
@@ -37,6 +37,12 @@ def politician_profile(request, politician_name_slug):
         elif not politician.getImageURL() and politician.gender == "F":
             context_dict['alt_profile_pic'] = "female"
 
+        try:
+            if UserSubscription.objects.get(politician=politician, user=request.user):
+                context_dict['can_subscribe'] = False
+        except:
+            context_dict['can_subscribe'] = True
+
         context_dict['politician'] = politician
 
     except Politician.DoesNotExist:
@@ -55,8 +61,34 @@ def search_list(request):
 
     return HttpResponse(serialized_data, content_type='application/json')
 
+# AJAX request to subscribe to politician
+@login_required
+def subscribe_to_pol(request):
+    
+    pol_id = None
 
+    # get politician ID that is going to be subscribed/unsubscribed to
+    if request.method == "GET":
+        pol_id = request.GET['pol_id']
 
+    # fetch politician object if 
+    if pol_id:
+        pol = Politician.objects.get(id=int(pol_id))
+
+    # see if it can be deleted (unsubscribed) to. If not, created a new subscription for user/politican
+    try:
+        UserSubscription.objects.get(politician=pol, user=request.user).delete()
+        return HttpResponse('Unsubscribed')
+
+    except Exception as e:
+        # no subscription? Created a new one for specific user/politician and save
+        subscription = UserSubscription(politician=pol, user=request.user, timestamp=datetime.datetime.now())
+        subscription.save()
+        return HttpResponse('Subscribed')
+
+    # total_subscriptions = len(UserSubscription.objects.filter(politician=pol))
+
+    return HttpResponse('Not subscribed')
 
 
 

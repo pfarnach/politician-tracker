@@ -37,12 +37,15 @@
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav navbar-right">
-	        <li class="active"><a href="/profiles">Politicians <span class="sr-only">(current)</span></a></li>
-	        <li><a href="#">My Profile </a></li>
+	        <li class="active"><a href="/profiles">Politicians <span class="sr-only">(current)</span></a></li>   
 	        <li><a href="#">About </a></li>
-	        <li><a href="#">Data </a></li>
-	        <li><a href="#">Login </a></li>
-	        <li><a href="#">Logout </a></li>
+	        {% if user.is_authenticated %}
+	        	<li><a href="#">My Profile </a></li>
+	        	<li><a href="{% url 'auth_logout' %}?next=/">Logout </a></li>
+	        {% else %}
+	        	<li><a href="{% url 'registration_register' %}">Register </a></li>
+				<li><a href="{% url 'auth_login' %}">Login </a></li>
+	        {% endif %}
 	      </ul>
 	    </div>
   	</div>

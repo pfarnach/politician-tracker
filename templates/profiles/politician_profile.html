@@ -10,16 +10,26 @@
 	
 <!-- Pol name -->
 <div class="row">
+	
+	<!-- Politician name -->
 	<div class="col-sm-10">
 		<h1 class="politician-name"><strong>{{ politician.official_full_name }}</strong></h1>
-	</div>
-	<div class="col-sm-2">
-		<a href="#" class="btn btn-danger btn-lg subscribe-btn"><i class="fa fa-eye"></i> Watch</a>
-	</div>
-</div>
+	</div> <!-- /col-sm-10 -->
+
+	<!-- Subscribe btn -->
+	<div class="col-sm-2" id="pol-subscribe">
+	{% if user.is_authenticated and can_subscribe %}
+		<a href="#" id="subscribe-btn" class="btn btn-danger btn-lg btn-subscribe" data-pol-id="{{ politician.id }}"><i class="fa fa-eye"></i><span> Watch</span></a>
+	{% elif user.is_authenticated and not can_subscribe %}
+		<a href="#" id="already-subscribed-btn" class="btn btn-primary btn-lg btn-unsubscribe" data-pol-id="{{ politician.id }}"><i class="fa fa-eye"></i><span> Watching</span></a>
+	{% endif %}
+	</div> <!-- /col-sm-2 -->
+
+</div> <!-- /row -->
 
 <!-- Picture / bio info section -->
 <div class="col-md-3">
+
 	<!-- Chamber (house or senate) -->
 	{% if politician.chamber == "rep" %}
 		<h3 class="chamber">U.S. House of Reps</h3>
@@ -62,17 +72,17 @@
 		<div class="tab-pane fade active in" id="contact">
 
 			<!-- social media info -->
-	  	<div class="social-media-icon-wrapper">
-		  	{% if politician.youtube_id %}
-		  		<a class="social-media-icon" href="https://www.youtube.com/user/{{ politician.youtube_id }}" target="_blank"><i class="fa fa-youtube"></i></a>	
-		  	{% endif %}
-
+			<div class="social-media-icon-wrapper">
 		  	{% if politician.twitter_id %}
 		 			<a class="social-media-icon" href="https://twitter.com/{{ politician.twitter_id }}" target="_blank"><i class="fa fa-twitter"></i></a> 		
 		  	{% endif %}
 		  	
 		  	{% if politician.facebook_id %}
 		  		<a class="social-media-icon" href="https://www.facebook.com/{{ politician.facebook_id }}" target="_blank"><i class="fa fa-facebook-official"></i></a>
+		  	{% endif %}
+
+		  	{% if politician.youtube_id %}
+		  		<a class="social-media-icon" href="https://www.youtube.com/user/{{ politician.youtube_id }}" target="_blank"><i class="fa fa-youtube-play"></i></a>	
 		  	{% endif %}
 	  	</div> <!-- social-media-icon-wrapper -->
 	  	

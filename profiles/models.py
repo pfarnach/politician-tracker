@@ -1,7 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+
 import os
-import urllib2
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 POL_IMG_DIR = os.path.join(BASE_DIR, 'static/images/congress_portraits/225x275/')
@@ -62,11 +63,30 @@ class Politician(models.Model):
 		self.slug = slugify(self.official_full_name)
 		super(Politician, self).save(*args, **kwargs)
 
+	# meant to determine if file with bioguide_id exists -- if not, return false and use default prof pic
 	def getImageURL(self):
 		self.imagePath = POL_IMG_DIR + self.id_bioguide + ".jpg"
 		return os.path.isfile(self.imagePath)
 
+class UserProfile(models.Model):
+	# This line is required. Links UserProfile to a User model instance
+	user = models.OneToOneField(User)
 
+	zipcode = models.IntegerField(max_length = 50, unique = False, default = None, blank=False, null=False)
+	last_login = models.DateTimeField(null=True, unique = False, default = None, blank=True)
+	created_on = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
+	email_pref = models.CharField(max_length = 500, unique = False, default=None, blank=True, null=True)
+	# Store UUID link
+	avatar = models.CharField(max_length = 1000, unique = True, default=None, blank=True, null=True)
+
+	# Override the __unicode__() method to return out something meaningful!
+	def __unicode__(self):
+		return self.user.username
+
+class UserSubscription(models.Model):
+	user = models.ForeignKey(User)
+	politician = models.ForeignKey(Politician)
+	timestamp = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
 
 
 

@@ -53,7 +53,7 @@ $(document).ready(function(){
 		// checks to make sure at least x amount of characters have been typed in first
 		if (filter.length >= 4) {
 			$("#search_results li").each(function() {
-				console.log($(this).text());
+				// console.log($(this).text());
 				if ($(this).text().search(new RegExp(filter, "i")) < 0) {
 					$(this).hide();
 				// Show the list item if the phrase matches and increase the count by 1

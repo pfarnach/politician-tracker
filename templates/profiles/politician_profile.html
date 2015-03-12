@@ -18,10 +18,8 @@
 
 	<!-- Subscribe btn -->
 	<div class="col-sm-2" id="pol-subscribe">
-	{% if user.is_authenticated and can_subscribe %}
-		<a href="#" id="subscribe-btn" class="btn btn-danger btn-lg btn-subscribe" data-pol-id="{{ politician.id }}"><i class="fa fa-eye"></i><span> Watch</span></a>
-	{% elif user.is_authenticated and not can_subscribe %}
-		<a href="#" id="already-subscribed-btn" class="btn btn-primary btn-lg btn-unsubscribe" data-pol-id="{{ politician.id }}"><i class="fa fa-eye"></i><span> Watching</span></a>
+	{% if user.is_authenticated %}
+		<a href="#" id="subscribe-btn" class="btn btn-lg btn-danger" data-pol-id="{{ politician.id }}" data-can-subscribe="{{ can_subscribe|yesno:"true,false" }}"><i class="fa fa-eye"></i><span> Watch</span></a>
 	{% endif %}
 	</div> <!-- /col-sm-2 -->
 

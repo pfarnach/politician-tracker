@@ -78,17 +78,17 @@ def subscribe_to_pol(request):
     # see if it can be deleted (unsubscribed) to. If not, created a new subscription for user/politican
     try:
         UserSubscription.objects.get(politician=pol, user=request.user).delete()
-        return HttpResponse('Unsubscribed')
+        return HttpResponse('unsubscribed')
 
     except Exception as e:
         # no subscription? Created a new one for specific user/politician and save
         subscription = UserSubscription(politician=pol, user=request.user, timestamp=datetime.datetime.now())
         subscription.save()
-        return HttpResponse('Subscribed')
+        return HttpResponse('subscribed')
 
     # total_subscriptions = len(UserSubscription.objects.filter(politician=pol))
 
-    return HttpResponse('Not subscribed')
+    return HttpResponse('neither subscribed nor unsubscribed')
 
 
 

@@ -6,8 +6,7 @@ POLITICIAN PROFILE PAGE
 	padding-left: 15px;
 }
 
-#politician-profile .btn-subscribe,
-#politician-profile .btn-unsubscribe {
+#politician-profile #subscribe-btn {
 	margin-top: 20px;
 }
 

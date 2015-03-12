@@ -90,6 +90,22 @@ def subscribe_to_pol(request):
 
     return HttpResponse('neither subscribed nor unsubscribed')
 
+# gets list of subscriptions for current user
+@login_required
+def view_subscriptions(request):
+    context_dict = {}
+    user_id = request.user.id
+
+    subscriptions = UserSubscription.objects.filter(user_id=user_id)
+    pols = []
+
+    for subscription in subscriptions:
+        pols.append(Politician.objects.get(id=subscription.politician_id))
+
+    context_dict['pols'] = pols
+
+    return render(request, 'profiles/view_subscriptions.html', context_dict)
+
 
 
 

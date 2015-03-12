@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Subscriptions{% endblock %}
+
+{% block body_block %}
+
+<div class="container">
+
+	<h1>Subscriptions</h1>
+	<h3>Politicians ({{ pols|length }})</h3>
+
+	{% for pol in pols %}
+		<h5>{{ pol.official_full_name }}</h5>
+	{% endfor %}
+
+</div>
+
+{% endblock %}

@@ -30,19 +30,18 @@ $(document).ready(function(){
 
 	// let server determine if unsubscribe or subscribe call then change btn accordingly
 	$('#subscribe-btn').on('click', function(){
-		var thisbtn = $(this),
-			pol_id = thisbtn.attr("data-pol-id");
+		var pol_id = subscribe_btn.attr("data-pol-id");
 
 		// subscribe ajax call
 		$.get('/profiles/subscribe_to_pol/', {pol_id: pol_id}, function(data) {
 			console.log(data);
 			if (data === "subscribed") {
-				thisbtn.children('span').html(' Watching');
-				thisbtn.toggleClass('btn-primary btn-danger');
+				subscribe_btn.children('span').html(' Watching');
+				subscribe_btn.toggleClass('btn-primary btn-danger');
 				can_subscribe = false;
 			} else if (data === "unsubscribed") {
-				thisbtn.children('span').html(' Watch');
-				thisbtn.toggleClass('btn-primary btn-danger');
+				subscribe_btn.children('span').html(' Watch');
+				subscribe_btn.toggleClass('btn-primary btn-danger');
 				can_subscribe = true;
 			}
 		});

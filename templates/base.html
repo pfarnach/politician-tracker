@@ -40,8 +40,15 @@
 	        <li class="active"><a href="/profiles">Politicians <span class="sr-only">(current)</span></a></li>   
 	        <li><a href="#">About </a></li>
 	        {% if user.is_authenticated %}
-	        	<li><a href="#">My Profile </a></li>
-	        	<li><a href="{% url 'auth_logout' %}?next=/">Logout </a></li>
+	        	<li class="dropdown">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Profile <span class="caret"></span></a>
+		          <ul class="dropdown-menu" role="menu">
+		            <li><a href="{% url 'view_subscriptions' %}">View subscriptions</a></li>
+		            <li><a href="{% url 'auth_password_change' %}">Change password</a></li>
+		            <li class="divider"></li>
+					<li><a href="{% url 'auth_logout' %}?next=/">Logout </a></li>
+		          </ul>
+		        </li>
 	        {% else %}
 	        	<li><a href="{% url 'registration_register' %}">Register </a></li>
 				<li><a href="{% url 'auth_login' %}">Login </a></li>

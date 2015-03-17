@@ -1,12 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from profiles.models import Politician, UserSubscription, UserProfile
+from profiles.models import Politician, UserSubscription, UserProfile, CachedOpenSecrets
 # from profiles.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
 from django.core import serializers # for AJAX response
 
-import datetime, math, us
+import datetime
+import math
+import us
+
+import apikeys
+import requests
+import urllib2
+import xml.etree.ElementTree as ET
+
 
 # index of politicians
 def politician_index(request):
@@ -57,7 +65,7 @@ def search_list(request):
 
     if request.method == "GET":
         politicians = Politician.objects.all()
-        serialized_data = serializers.serialize("json", politicians)        
+        serialized_data = serializers.serialize("json", politicians)
 
     return HttpResponse(serialized_data, content_type='application/json')
 
@@ -106,6 +114,89 @@ def view_subscriptions(request):
 
     return render(request, 'profiles/view_subscriptions.html', context_dict)
 
+def get_money_info(request):
+
+    if request.method == "GET":
+        pol_id = request.GET['pol_id']
+
+    try:
+        pol = Politician.objects.get(id=pol_id)
+    except Politician.DoesNotExist:
+        print "Politician does not exist"
+
+    try:
+        cached = CachedOpenSecrets.objects.get(politician_id=1)
+    except CachedOpenSecrets.DoesNotExist:
+        data = cache_opensecrets(pol_id, pol)
+        print 'lol'
+        # cached_data = serializers.serialize("json", data)
+
+        print "lolcat"
+        print data.top_contributor
+
+        return HttpResponse(data.top_contributor)
+
+    return HttpResponse('no dice')
+
+
+def cache_opensecrets(pol_id, pol): 
+
+    # OpenSecrets API parameters
+    apikey = apikeys.opensecrets
+    method1 = 'memPFDprofile'
+    method2 = 'candContrib'
+    method3 = 'candIndustry'
+    year = '2014'
+    cycle = '2014'
+    cid = pol.id_opensecrets
+    output1 = 'json'
+    output2 = 'xml'
+
+    ### Call to get indiv contributor info
+    base_url = "http://www.opensecrets.org/api/?method=%s&cycle=%s&cid=%s&output=%s&apikey=%s" % (method2, cycle, cid, output1, apikey)
+    request = requests.get(base_url).json()
+    request_root = request['response']['contributors']['contributor']
+
+    top_contributor = []
+
+    for i in range(len(request_root)):
+        top_contributor.append([])
+        top_contributor[i] = {}
+        top_contributor[i]['org_name'] = request_root[i]['@attributes']['org_name']
+        top_contributor[i]['total'] = request_root[i]['@attributes']['total']
+        top_contributor[i]['pacs'] = request_root[i]['@attributes']['pacs']
+        top_contributor[i]['indivs'] = request_root[i]['@attributes']['indivs']
+
+    ### Call to get industry contributor info
+    base_url = "http://www.opensecrets.org/api/?method=%s&cycle=%s&cid=%s&output=%s&apikey=%s" % (method3, cycle, cid, output1, apikey)
+    request = requests.get(base_url).json()
+    request_root = request['response']['industries']['industry']
+
+    top_industry = []
+
+    for i in range(len(request_root)):
+        top_industry.append([])
+        top_industry[i] = {}
+        top_industry[i]['total'] = request_root[i]['@attributes']['total']
+        top_industry[i]['pacs'] = request_root[i]['@attributes']['pacs']
+        top_industry[i]['indivs'] = request_root[i]['@attributes']['indivs']
+        top_industry[i]['industry_code'] = request_root[i]['@attributes']['industry_code']
+        top_industry[i]['industry_name'] = request_root[i]['@attributes']['industry_name']
+
+    ### Call to get net worth (high and low)
+    base_url = "http://www.opensecrets.org/api/?method=%s&year=%s&cid=%s&output=%s&apikey=%s" % (method1, year, cid, output2, apikey)
+    request = urllib2.urlopen(base_url).read()
+    request_xml = ET.fromstring(request)
+
+    net_low = int(request_xml[0].attrib['net_low'])
+    net_high = int(request_xml[0].attrib['net_high'])
+
+    # Create new instance with timestamp that will 'expire' in a week
+    cached = CachedOpenSecrets(politician=pol, timestamp=datetime.datetime.now(), top_contributor=top_contributor, top_industry=top_industry, net_low=net_low, net_high=net_high)
+    cached.save()
+    print "saved"
+    print cached
+    return cached
 
 
 

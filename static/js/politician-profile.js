@@ -8,7 +8,6 @@ $(document).ready(function(){
 	$('#politician-profile #profile-pic').hide();
 	$('#politician-profile #profile-pic').fadeIn(1000);
 
-
 	// -----------------------
 	// Subscribe button
 	// -----------------------
@@ -46,4 +45,39 @@ $(document).ready(function(){
 			}
 		});
 	});
+
 });
+
+
+// -----------------------
+// Angular.js widget
+// -----------------------
+
+angular.module('PoliticianProfile', [])
+	.config(function($interpolateProvider) {
+		$interpolateProvider.startSymbol('{[{');
+		$interpolateProvider.endSymbol('}]}');
+	})
+	.controller('MoneyController', function($scope, $http) {
+		var pol_id = document.getElementById("money").getAttribute('data-pol-id');
+		$scope.test = pol_id;
+
+		// do AJAX request to server to get money info
+		// fetch and display photos
+		var fetchMoneyInfo = function(pol_id) {
+			$http.get('/profiles/get_money_info/', {params: {pol_id: pol_id}})
+				.success(function(data, status, headers, config) {
+					console.log(data);
+				})
+				.error(function(data, status, headers, config) {
+					console.log('AJAX request error');
+				});
+			};
+
+		fetchMoneyInfo(pol_id);
+	});
+
+
+
+
+

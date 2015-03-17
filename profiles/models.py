@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-
+from jsonfield import JSONField
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -88,6 +88,17 @@ class UserSubscription(models.Model):
 	politician = models.ForeignKey(Politician)
 	timestamp = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
 
+class CachedOpenSecrets(models.Model):
+	politician = models.ForeignKey(Politician)
+	timestamp = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
+
+	# will store JSON
+	top_contributor = JSONField(max_length = 5000, unique = False, default=None, blank=True, null=True)
+	top_industry = JSONField(max_length = 5000, unique = False, default=None, blank=True, null=True)
+
+	# from memPFDprofile
+	net_low = models.IntegerField(max_length = 50, unique = False, default = None, blank=False, null=False)
+	net_high = models.IntegerField(max_length = 50, unique = False, default = None, blank=False, null=False)
 
 
 

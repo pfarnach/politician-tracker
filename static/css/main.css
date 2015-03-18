@@ -32,6 +32,10 @@ POLITICIAN PROFILE PAGE
 	margin: 10px 0;
 }
 
+#politician-profile #myTabContent p {
+	margin-bottom: 7px;
+}
+
 #politician-profile .tab-pane .social-media-icon {
 	margin-right: 1.4rem;
 	font-size: 2rem;
@@ -65,6 +69,27 @@ POLITICIAN PROFILE PAGE
 	display: inline-block;
 }
 
+#politician-profile #net-worth .panel-body {
+	font-size: .9em;
+}
+
+#politician-profile #money-wait {
+	width: 15%;
+	display: block;
+	position: absolute;
+	top: 200px;
+	left: 40%;
+	margin: 0 auto;
+}
+
+#politician-profile .money-hidden {
+	 opacity: 0;
+	 transition: opacity 0.4s ease-in-out;
+}
+
+#politician-profile .money-fade-in {
+	opacity: 1;
+}
 
 /*------------------------
 REGISTRATION PAGES (/user/)

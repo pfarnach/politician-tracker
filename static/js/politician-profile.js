@@ -65,11 +65,12 @@ angular.module('PoliticianProfile', [])
 		return {
 			restrict: 'E',
 			templateUrl: '/static/moneyinfo.html',
-		}
+		};
 	})
 
 	.controller('MoneyController', function($scope, $http) {
 		$scope.test = pol_id;
+		$scope.fade = false;
 
 		// do AJAX request to server to get money info
 		// fetch and display photos
@@ -94,6 +95,8 @@ angular.module('PoliticianProfile', [])
 						d['total'] = +d['total'];
 						d['pacs'] = +d['pacs'];
 					});
+
+					$scope.fade = true;
 
 				})
 				.error(function(data, status, headers, config) {
@@ -137,6 +140,9 @@ angular.module('PoliticianProfile', [])
 			}
 		};
 	});
+
+// add loading button for ajax request
+// check cache on server
 
 
 

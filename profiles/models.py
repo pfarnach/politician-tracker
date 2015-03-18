@@ -97,8 +97,8 @@ class CachedOpenSecrets(models.Model):
 	top_industry = JSONField(max_length = 5000, unique = False, default=None, blank=True, null=True)
 
 	# from memPFDprofile
-	net_low = models.IntegerField(max_length = 50, unique = False, default = None, blank=False, null=False)
-	net_high = models.IntegerField(max_length = 50, unique = False, default = None, blank=False, null=False)
+	net_low = models.IntegerField(max_length = 50, unique = False, default = None, blank=True, null=True)
+	net_high = models.IntegerField(max_length = 50, unique = False, default = None, blank=True, null=True)
 
 
 

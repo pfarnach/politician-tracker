@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
 from django.core import serializers # for AJAX response
 
+from django.utils import timezone
 import datetime
 import math
 import us
@@ -114,32 +115,45 @@ def view_subscriptions(request):
 
     return render(request, 'profiles/view_subscriptions.html', context_dict)
 
+# AJAX request to get cached OpenSecrets data -- if it doesn't already exist or is expired, fetch it
 def get_money_info(request):
+
+    pol = None
 
     if request.method == "GET":
         pol_id = request.GET['pol_id']
 
+    # see if politcian by ID exists
     try:
         pol = Politician.objects.get(id=pol_id)
     except Politician.DoesNotExist:
-        print "Politician does not exist"
+        HttpResponse('Politician does not exist')
 
+    # see if cache exists for politician, if not, go get it and return it
     try:
-        cached = CachedOpenSecrets.objects.get(politician_id=1)
+        cached = CachedOpenSecrets.objects.get(politician_id=pol_id)
     except CachedOpenSecrets.DoesNotExist:
-        data = cache_opensecrets(pol_id, pol)
-
-        print type(data.top_contributor)
-
-        serialized_data = serializers.serialize("json", [data])
-        print type(serialized_data)
-
-
+        cached = cache_opensecrets(pol_id, pol)
+        serialized_data = serializers.serialize("json", [cached])
         return HttpResponse(serialized_data, content_type='application/json')
 
-    return HttpResponse('no dice')
+    # if cache exists, check to see if it's expired (every 5 days)
+    if cached and pol:
+        time_cached = cached.timestamp
+        time_now = timezone.now()
+        time_diff = time_now - time_cached
 
+        if time_diff > datetime.timedelta(days=5):
+            print "cache expired"
+            cached = cache_opensecrets(pol_id, pol)
+            serialized_data = serializers.serialize("json", [cached])
+            return HttpResponse(serialized_data, content_type='application/json')
+        else:
+            print "cache still good"
+            serialized_data = serializers.serialize("json", [cached])
+            return HttpResponse(serialized_data, content_type='application/json')
 
+# auxiliary function that queries Opensecrets API
 def cache_opensecrets(pol_id, pol): 
 
     # OpenSecrets API parameters
@@ -189,11 +203,16 @@ def cache_opensecrets(pol_id, pol):
     request = urllib2.urlopen(base_url).read()
     request_xml = ET.fromstring(request)
 
-    net_low = int(request_xml[0].attrib['net_low'])
-    net_high = int(request_xml[0].attrib['net_high'])
+    # some politicians won't have net value info
+    try:
+        net_low = int(request_xml[0].attrib['net_low'])
+        net_high = int(request_xml[0].attrib['net_high'])
+    except:
+        net_low = None
+        net_high = None
 
     # Create new instance with timestamp that will 'expire' in a week
-    cached = CachedOpenSecrets(politician=pol, timestamp=datetime.datetime.now(), top_contributor=top_contributor, top_industry=top_industry, net_low=net_low, net_high=net_high)
+    cached = CachedOpenSecrets(politician=pol, timestamp=timezone.now(), top_contributor=top_contributor, top_industry=top_industry, net_low=net_low, net_high=net_high)
     cached.save()
     return cached
 

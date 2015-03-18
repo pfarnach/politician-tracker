@@ -7,7 +7,8 @@ POLITICIAN PROFILE PAGE
 }
 
 #politician-profile #subscribe-btn {
-	margin-top: 20px;
+	margin: 20px 0;
+	width: 150px;
 }
 
 #politician-profile .chamber {
@@ -84,7 +85,7 @@ POLITICIAN PROFILE PAGE
 
 #politician-profile .money-hidden {
 	 opacity: 0;
-	 transition: opacity 0.4s ease-in-out;
+	 transition: opacity 0.6s ease-in-out;
 }
 
 #politician-profile .money-fade-in {

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load staticfiles%}
 {% block title %}Profiles{% endblock %}
 
 {% block body_block %}
@@ -17,11 +17,11 @@
 	</div> <!-- /col-sm-10 -->
 
 	<!-- Subscribe btn -->
-	<div class="col-sm-2" id="pol-subscribe">
 	{% if user.is_authenticated %}
-		<a href="#" id="subscribe-btn" class="btn btn-lg btn-danger" data-pol-id="{{ politician.id }}" data-can-subscribe="{{ can_subscribe|yesno:"true,false" }}"><i class="fa fa-eye"></i><span> Watch</span></a>
-	{% endif %}
+	<div class="col-sm-2" id="pol-subscribe">
+		<button id="subscribe-btn" class="btn btn-lg btn-danger" data-pol-id="{{ politician.id }}" data-can-subscribe="{{ can_subscribe|yesno:"true,false" }}"><i class="fa fa-eye"></i><span> Watch</span></button>
 	</div> <!-- /col-sm-2 -->
+	{% endif %}
 
 </div> <!-- /row -->
 

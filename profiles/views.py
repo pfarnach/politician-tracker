@@ -105,9 +105,12 @@ def view_subscriptions(request):
     context_dict = {}
     user_id = request.user.id
 
+    # get subscriptions based on current user
     subscriptions = UserSubscription.objects.filter(user_id=user_id)
+
     pols = []
 
+    # build list of politicians that user is subscribed to
     for subscription in subscriptions:
         pols.append(Politician.objects.get(id=subscription.politician_id))
 
@@ -137,13 +140,13 @@ def get_money_info(request):
         serialized_data = serializers.serialize("json", [cached])
         return HttpResponse(serialized_data, content_type='application/json')
 
-    # if cache exists, check to see if it's expired (every 5 days)
+    # if cache exists, check to see if it's expired (every 1 day)
     if cached and pol:
         time_cached = cached.timestamp
         time_now = timezone.now()
         time_diff = time_now - time_cached
 
-        if time_diff > datetime.timedelta(days=5):
+        if time_diff > datetime.timedelta(days=1):
             print "cache expired"
             cached = cache_opensecrets(pol_id, pol)
             serialized_data = serializers.serialize("json", [cached])

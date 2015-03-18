@@ -6,13 +6,45 @@
 
 <div class="container">
 
-	<h1>Subscriptions for {{ user.username }}</h1>
-	<h3>Politicians ({{ pols|length }})</h3>
-
-	{% for pol in pols %}
-		<h5>{{ pol.official_full_name }}</h5>
-	{% endfor %}
-
+	<h1>Subscriptions for {{ user.username }} ({{ pols|length }})</h1>
+	<div class="col-md-9">
+		<table class="table table-striped table-hover ">
+		  <thead>
+		    <tr>
+		      <th>#</th>
+		      <th>Name</th>
+		      <th>Chamber</th>
+		      <th>State/District</th>
+		      <th>Unsubscribe</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{% for pol in pols %}
+		    <tr>
+		      <td>{{ forloop.counter }}</td>
+		      <td><a href="/profiles/{{ pol.slug }}">{{ pol.official_full_name }}</a></td>
+		      <td>
+		      	{% if pol.chamber == "sen" %}
+		      		U.S. Senate
+		      	{% elif pol.chamber == "rep" %}
+							U.S. House of Representatives
+						{% else %}
+							None
+		      	{% endif %}
+		    	</td>
+		      <td>{{ pol.state }}
+		      	{% if pol.rep_district %}
+		      		-{{ pol.rep_district }}
+		      	{% endif %}
+		      </td>
+		      <td>
+		      	<button class="subscribe-btn-subscriptions btn btn-sm btn-danger" data-pol-id-subscriptions="{{ pol.id }}"><i class="fa fa-check-square"></i></button>
+		      </td>
+		    </tr>
+		    {% endfor %}
+		  </tbody>
+		</table>
+	</div>
 </div>
 
 {% endblock %}

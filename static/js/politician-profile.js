@@ -33,9 +33,15 @@ $(document).ready(function(){
 	// let server determine if unsubscribe or subscribe call then change btn accordingly
 	$('#subscribe-btn').on('click', function(){
 
-		// subscribe ajax call
+		// disable button until AJAX request goes through
+		$(this).prop("disabled",true);
+
+		// subscribe AJAX call
 		$.get('/profiles/subscribe_to_pol/', {pol_id: pol_id}, function(data) {
-			console.log(data);
+
+			// enable button after AJAX request goes through
+			$('#subscribe-btn').prop("disabled",false);
+
 			if (data === "subscribed") {
 				subscribe_btn.children('span').html(' Watching');
 				subscribe_btn.toggleClass('btn-primary btn-danger');
@@ -48,11 +54,32 @@ $(document).ready(function(){
 		});
 	});
 
+	// unsubscribe button on view_subscriptions page
+	$('.subscribe-btn-subscriptions').on('click', function(){
+		var this_button = $(this);
+		var pol_id_subscriptions = this_button.attr('data-pol-id-subscriptions');
+		// disable button until AJAX request goes through
+		this_button.prop("disabled",true);
+
+		// subscribe AJAX call
+		$.get('/profiles/subscribe_to_pol/', {pol_id: pol_id_subscriptions}, function(data) {
+			
+			// enable button after AJAX request goes through
+			this_button.prop("disabled",false);
+
+			if (data === "subscribed") {
+				this_button.toggleClass('btn-primary btn-danger');
+			} else if (data === "unsubscribed") {
+				this_button.toggleClass('btn-primary btn-danger');
+			}
+		});
+	});
+
 });
 
 
 // -----------------------
-// Angular.js widget
+// Angular.js widgets
 // -----------------------
 
 angular.module('PoliticianProfile', [])

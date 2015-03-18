@@ -48,6 +48,23 @@ POLITICIAN PROFILE PAGE
 	color: #F04124;
 }
 
+/*--------- Main info tabs ----------*/
+#politician-profile .row.money-info {
+	margin-top: 20px;
+}
+
+#politician-profile th {
+	cursor: pointer;
+}
+
+#politician-profile .total-contributions {
+	text-align: center;
+}
+
+#politician-profile #net-worth .panel {
+	display: inline-block;
+}
+
 
 /*------------------------
 REGISTRATION PAGES (/user/)

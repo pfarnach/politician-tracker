@@ -128,13 +128,14 @@ def get_money_info(request):
         cached = CachedOpenSecrets.objects.get(politician_id=1)
     except CachedOpenSecrets.DoesNotExist:
         data = cache_opensecrets(pol_id, pol)
-        print 'lol'
-        # cached_data = serializers.serialize("json", data)
 
-        print "lolcat"
-        print data.top_contributor
+        print type(data.top_contributor)
 
-        return HttpResponse(data.top_contributor)
+        serialized_data = serializers.serialize("json", [data])
+        print type(serialized_data)
+
+
+        return HttpResponse(serialized_data, content_type='application/json')
 
     return HttpResponse('no dice')
 
@@ -194,8 +195,6 @@ def cache_opensecrets(pol_id, pol):
     # Create new instance with timestamp that will 'expire' in a week
     cached = CachedOpenSecrets(politician=pol, timestamp=datetime.datetime.now(), top_contributor=top_contributor, top_industry=top_industry, net_low=net_low, net_high=net_high)
     cached.save()
-    print "saved"
-    print cached
     return cached
 
 

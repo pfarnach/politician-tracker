@@ -1,3 +1,5 @@
+var pol_id;
+
 $(document).ready(function(){
 
 	// -----------------------
@@ -15,6 +17,7 @@ $(document).ready(function(){
 	// check to see if already subscribed
 	var subscribe_btn = $('#subscribe-btn'),
 		can_subscribe = subscribe_btn.attr("data-can-subscribe") === "true" ? true : false;
+		pol_id = subscribe_btn.attr("data-pol-id");
 
 	// fade button in
 	subscribe_btn.hide();
@@ -29,7 +32,6 @@ $(document).ready(function(){
 
 	// let server determine if unsubscribe or subscribe call then change btn accordingly
 	$('#subscribe-btn').on('click', function(){
-		var pol_id = subscribe_btn.attr("data-pol-id");
 
 		// subscribe ajax call
 		$.get('/profiles/subscribe_to_pol/', {pol_id: pol_id}, function(data) {
@@ -58,8 +60,15 @@ angular.module('PoliticianProfile', [])
 		$interpolateProvider.startSymbol('{[{');
 		$interpolateProvider.endSymbol('}]}');
 	})
+
+	.directive('moneyInfo', function () {
+		return {
+			restrict: 'E',
+			templateUrl: '/static/moneyinfo.html',
+		}
+	})
+
 	.controller('MoneyController', function($scope, $http) {
-		var pol_id = document.getElementById("money").getAttribute('data-pol-id');
 		$scope.test = pol_id;
 
 		// do AJAX request to server to get money info
@@ -67,7 +76,25 @@ angular.module('PoliticianProfile', [])
 		var fetchMoneyInfo = function(pol_id) {
 			$http.get('/profiles/get_money_info/', {params: {pol_id: pol_id}})
 				.success(function(data, status, headers, config) {
-					console.log(data);
+
+					$scope.net_low = data[0]['fields']['net_low'];
+					$scope.net_high = data[0]['fields']['net_high'];
+					$scope.top_contributors = JSON.parse(data[0]['fields']['top_contributor']);
+					$scope.top_industries = JSON.parse(data[0]['fields']['top_industry']);
+
+					// convert string integer values to integers
+					$scope.top_contributors.forEach(function(d) {
+						d['indivs'] = +d['indivs'];
+						d['total'] = +d['total'];
+						d['pacs'] = +d['pacs'];
+					});
+
+					$scope.top_industries.forEach(function(d) {
+						d['indivs'] = +d['indivs'];
+						d['total'] = +d['total'];
+						d['pacs'] = +d['pacs'];
+					});
+
 				})
 				.error(function(data, status, headers, config) {
 					console.log('AJAX request error');
@@ -75,6 +102,40 @@ angular.module('PoliticianProfile', [])
 			};
 
 		fetchMoneyInfo(pol_id);
+
+			// for order preference
+		$scope.orderPrefOrg = "-total";
+		$scope.orderPrefIndustry = "-total";
+		$scope.selectedHeaderOrg = "total";
+		$scope.selectedHeaderIndustry = "total";
+		$scope.ascendingOrg = true;
+		$scope.ascendingIndustry = true;
+
+		// orders how entry rows are displayed (toggles between asc and desc order)
+		$scope.selectOrderOrg = function(pref) {
+
+			$scope.selectedHeaderOrg = pref;
+			if (pref == $scope.orderPrefOrg) {
+				$scope.orderPrefOrg = "-" + pref;
+				$scope.ascendingOrg = false;
+			} else {
+				$scope.orderPrefOrg = pref;
+				$scope.ascendingOrg = true;
+			}
+		};
+
+		// for Industry table
+		$scope.selectOrderIndustry = function(pref) {
+
+			$scope.selectedHeaderIndustry = pref;
+			if (pref == $scope.orderPrefIndustry) {
+				$scope.orderPrefIndustry = "-" + pref;
+				$scope.ascendingIndustry = false;
+			} else {
+				$scope.orderPrefIndustry = pref;
+				$scope.ascendingIndustry = true;
+			}
+		};
 	});
 
 

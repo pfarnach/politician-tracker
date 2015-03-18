@@ -1,0 +1,85 @@
+<div ng-controller="MoneyController" id="money">
+	<div class="row money-info">
+		<div class="col-md-6">
+			<div class="panel panel-info">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Top Individual Contributors</h3>
+			  </div>
+			  <div class="panel-body">
+		  		<table class="table table-striped table-hover ">
+					  <thead>
+					    <tr>
+					      <th ng-click="selectOrderOrg('org_name')">Organization Name</th>
+					      <th ng-click="selectOrderOrg('total')">Total Contributions</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr ng-repeat="contributor in top_contributors | orderBy: orderPrefOrg">
+					      <td class="org-name">{[{ contributor.org_name }]}</td>
+					      <td class="total-contributions">{[{ contributor.total | currency:"$":0 }]}</td>
+					    </tr>
+					  </tbody>
+					</table>
+			  </div><!-- /panel-body -->
+			</div><!-- /panel -->
+		</div><!-- /col-md-6 -->
+		<div class="col-md-6">
+			<div class="panel panel-info">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Top Industry Contributors</h3>
+			  </div>
+			  <div class="panel-body">
+		  		<table class="table table-striped table-hover ">
+					  <thead>
+					    <tr>
+					      <th ng-click="selectOrderIndustry('industry_name')">Industry Name</th>
+					      <th ng-click="selectOrderIndustry('total')">Total Contributions</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr ng-repeat="industry in top_industries | orderBy: orderPrefIndustry">
+					      <td class="org-name">{[{ industry.industry_name }]}</td>
+					      <td class="total-contributions">{[{ industry.total | currency:"$":0 }]}</td>
+					    </tr>
+					  </tbody>
+					</table>
+			  </div><!-- /panel-body -->
+			</div><!-- /panel -->
+		</div><!-- /col-md-6 -->
+	</div><!-- /row -->
+	<div class="row money-info">
+		<div class="col-md-6">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+			    <h3 class="panel-title">Net Worth (est.)</h3>
+			  </div>
+			  <div class="panel-body" id="net-worth">
+			    <div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">Low</h3>
+					  </div>
+					  <div class="panel-body">
+					    {[{ net_low | currency:"$":0 }]}
+					  </div> <!-- /panel-body -->
+					</div><!-- /panel -->
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">Average</h3>
+					  </div>
+					  <div class="panel-body">
+					    {[{ ( net_low + net_high)/2 | currency:"$":0 }]}
+					  </div> <!-- /panel-body -->
+					</div><!-- /panel -->
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">High</h3>
+					  </div>
+					  <div class="panel-body">
+					    {[{ net_high | currency:"$":0 }]}
+					  </div> <!-- /panel-body -->
+					</div><!-- /panel -->
+			  </div><!-- /panel-body -->
+			</div><!-- /panel -->
+		</div><!-- /col-md -->
+	</div><!-- /row -->
+</div> <!-- /ng-controller -->

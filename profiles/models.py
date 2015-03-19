@@ -74,7 +74,7 @@ class UserProfile(models.Model):
 
 	zipcode = models.IntegerField(max_length = 50, unique = False, default = None, blank=False, null=False)
 	last_login = models.DateTimeField(null=True, unique = False, default = None, blank=True)
-	created_on = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
+	created_on = models.DateTimeField(null=True, unique = False, blank=False)
 	email_pref = models.CharField(max_length = 500, unique = False, default=None, blank=True, null=True)
 	# Store UUID link
 	avatar = models.CharField(max_length = 1000, unique = True, default=None, blank=True, null=True)
@@ -86,11 +86,11 @@ class UserProfile(models.Model):
 class UserSubscription(models.Model):
 	user = models.ForeignKey(User)
 	politician = models.ForeignKey(Politician)
-	timestamp = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
+	timestamp = models.DateTimeField(null=True, unique = False, blank=False)
 
 class CachedOpenSecrets(models.Model):
 	politician = models.ForeignKey(Politician)
-	timestamp = models.DateTimeField(auto_now_add = True, null=True, unique = False, blank=False)
+	timestamp = models.DateTimeField(null=True, unique = False, blank=False)
 
 	# will store JSON
 	top_contributor = JSONField(max_length = 5000, unique = False, default=None, blank=True, null=True)
@@ -99,6 +99,26 @@ class CachedOpenSecrets(models.Model):
 	# from memPFDprofile
 	net_low = models.IntegerField(max_length = 50, unique = False, default = None, blank=True, null=True)
 	net_high = models.IntegerField(max_length = 50, unique = False, default = None, blank=True, null=True)
+
+class Article(models.Model):
+	politician = models.ForeignKey(Politician)
+	user = models.ForeignKey(User)
+	timestamp = models.DateTimeField(unique = False, null=True, blank=False)
+	title = models.CharField(max_length = 500, unique = False, null=False, blank=False)
+	url = models.URLField(max_length=1000, unique = False, null=False, blank=False)
+	tags = JSONField(max_length = 500, unique = False, default=None, blank=True, null=True)
+
+	def __unicode__(self):
+		return self.title
+
+class ArticleVote(models.Model):
+	user = models.ForeignKey(User)
+	article = models.ForeignKey(Article)
+	timestamp = models.DateTimeField(unique = False, default=None, null=False, blank=False)
+	vote = models.CharField(max_length = 50, unique = False, default = None, null=True, blank=True)
+
+	def __unicode__(self):
+		return self.vote
 
 
 

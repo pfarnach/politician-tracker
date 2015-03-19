@@ -2,6 +2,8 @@ var pol_id;
 
 $(document).ready(function(){
 
+	pol_id = $('#politician-name').attr("data-pol-id");
+
 	// -----------------------
 	// Profile pic fade-in
 	// -----------------------
@@ -17,7 +19,6 @@ $(document).ready(function(){
 	// check to see if already subscribed
 	var subscribe_btn = $('#subscribe-btn'),
 		can_subscribe = subscribe_btn.attr("data-can-subscribe") === "true" ? true : false;
-		pol_id = subscribe_btn.attr("data-pol-id");
 
 	// fade button in
 	subscribe_btn.hide();
@@ -27,7 +28,8 @@ $(document).ready(function(){
 	if (!can_subscribe) {
 		subscribe_btn.toggleClass('btn-subscribe btn-unsubscribe');
 		subscribe_btn.toggleClass('btn-primary btn-danger');
-		subscribe_btn.children('span').html(' Watching');
+		subscribe_btn.children('i').toggleClass('glyphicon-eye-open glyphicon-eye-close');
+		subscribe_btn.children('span').html(' Unwatch');
 	}
 
 	// let server determine if unsubscribe or subscribe call then change btn accordingly
@@ -43,12 +45,14 @@ $(document).ready(function(){
 			$('#subscribe-btn').prop("disabled",false);
 
 			if (data === "subscribed") {
-				subscribe_btn.children('span').html(' Watching');
+				subscribe_btn.children('span').html(' Unwatch');
 				subscribe_btn.toggleClass('btn-primary btn-danger');
+				subscribe_btn.children('i').toggleClass('glyphicon-eye-open glyphicon-eye-close');
 				can_subscribe = false;
 			} else if (data === "unsubscribed") {
 				subscribe_btn.children('span').html(' Watch');
 				subscribe_btn.toggleClass('btn-primary btn-danger');
+				subscribe_btn.children('i').toggleClass('glyphicon-eye-open glyphicon-eye-close');
 				can_subscribe = true;
 			}
 		});
@@ -66,12 +70,8 @@ $(document).ready(function(){
 			
 			// enable button after AJAX request goes through
 			this_button.prop("disabled",false);
-
-			if (data === "subscribed") {
-				this_button.toggleClass('btn-primary btn-danger');
-			} else if (data === "unsubscribed") {
-				this_button.toggleClass('btn-primary btn-danger');
-			}
+			this_button.toggleClass('btn-primary btn-danger');
+			this_button.children('i').toggleClass('glyphicon-eye-open glyphicon-eye-close');
 		});
 	});
 
@@ -91,12 +91,20 @@ angular.module('PoliticianProfile', [])
 	.directive('moneyInfo', function () {
 		return {
 			restrict: 'E',
-			templateUrl: '/static/moneyinfo.html',
+			templateUrl: '/static/moneyinfo.html'
 		};
 	})
 
+	.directive('tooltip', function() {
+		return {
+			restrict: 'A',
+			link: $('[data-toggle="tooltip"]').tooltip({
+        			placement : 'top'
+    			})
+		}
+	})
+
 	.controller('MoneyController', function($scope, $http) {
-		$scope.test = pol_id;
 		$scope.fade = false;
 
 		// do AJAX request to server to get money info
@@ -166,12 +174,32 @@ angular.module('PoliticianProfile', [])
 				$scope.ascendingIndustry = true;
 			}
 		};
+	})
+
+	.directive('articleDisplay', function () {
+		return {
+			restrict: 'E',
+			templateUrl: '/static/articledisplay.html'
+		};
+	})
+
+	.controller('ArticleController', function($scope, $http) {
+
+		var fetchArticles = function() {
+			console.log('ajax request made');
+			$http.get('/profiles/get_articles/', {params: {pol_id: pol_id}})
+				.success(function(data, status, headers, config) {
+					console.log(data);
+					$scope.no_articles = data['articles'];
+					$scope.is_authenticated = data['is_authenticated'];
+				})
+				.error(function(data, status, headers, config) {
+					console.log('AJAX request error');
+				});
+			};
+
+		fetchArticles();
 	});
-
-// add loading button for ajax request
-// check cache on server
-
-
 
 
 

@@ -13,13 +13,13 @@
 	
 	<!-- Politician name -->
 	<div class="col-sm-10">
-		<h1 class="politician-name"><strong>{{ politician.official_full_name }}</strong></h1>
+		<h1 id="politician-name" data-pol-id="{{ politician.id }}"><strong>{{ politician.official_full_name }}</strong></h1>
 	</div> <!-- /col-sm-10 -->
 
 	<!-- Subscribe btn -->
 	{% if user.is_authenticated %}
 	<div class="col-sm-2" id="pol-subscribe">
-		<button id="subscribe-btn" class="btn btn-lg btn-danger" data-pol-id="{{ politician.id }}" data-can-subscribe="{{ can_subscribe|yesno:"true,false" }}"><i class="fa fa-eye"></i><span> Watch</span></button>
+		<button id="subscribe-btn" class="btn btn-lg btn-danger" data-can-subscribe="{{ can_subscribe|yesno:"true,false" }}"><i class="glyphicon glyphicon-eye-open"></i><span> Watch</span></button>
 	</div> <!-- /col-sm-2 -->
 	{% endif %}
 
@@ -120,17 +120,17 @@
 <!-- Main info block -->
 <div class="col-md-9">
 	<ul class="nav nav-tabs">
-	  <li class="active"><a href="#money" data-toggle="tab">Money</a></li>
-	  <li><a href="#discussion" data-toggle="tab">People's Voice</a></li>
+	  <li><a href="#money" data-toggle="tab">Money</a></li>
+	  <li class="active"><a href="#real-talk" data-toggle="tab">Real Talk</a></li>
 	  <li><a href="#activity" data-toggle="tab">Political activity</a></li>
 	  <li><a href="#rss" data-toggle="tab">RSS Feed</a></li>
 	</ul>
 	<div id="myTabContent" class="tab-content">
-	  <div class="tab-pane fade active in" id="money">
+	  <div class="tab-pane fade" id="money">
 	  	<money-info></money-info> <!-- angular.js custom element directive -->
 	  </div>
-	  <div class="tab-pane fade" id="discussion">
-	    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+	  <div class="tab-pane fade active in" id="real-talk">
+	    <article-display></article-display>
 	  </div>
 	  <div class="tab-pane fade" id="activity">
 	    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>

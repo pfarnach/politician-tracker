@@ -4,7 +4,7 @@
 
 {% block body_block %}
 
-<div class="container">
+<div class="container" id="subscriptions">
 
 	<h1>Subscriptions for {{ user.username }} ({{ pols|length }})</h1>
 	<div class="col-md-9">
@@ -14,16 +14,16 @@
 		      <th>#</th>
 		      <th>Name</th>
 		      <th>Chamber</th>
-		      <th>State/District</th>
-		      <th>Unsubscribe</th>
+		      <th class="center-col">State/District</th>
+		      <th class="center-col">Un-watch</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		  	{% for pol in pols %}
 		    <tr>
-		      <td>{{ forloop.counter }}</td>
-		      <td><a href="/profiles/{{ pol.slug }}">{{ pol.official_full_name }}</a></td>
-		      <td>
+		      <td class="vert-align">{{ forloop.counter }}</td>
+		      <td class="vert-align"><a href="/profiles/{{ pol.slug }}">{{ pol.official_full_name }}</a></td>
+		      <td class="vert-align">
 		      	{% if pol.chamber == "sen" %}
 		      		U.S. Senate
 		      	{% elif pol.chamber == "rep" %}
@@ -32,13 +32,13 @@
 							None
 		      	{% endif %}
 		    	</td>
-		      <td>{{ pol.state }}
+		      <td class="center-col vert-align">{{ pol.state }}
 		      	{% if pol.rep_district %}
 		      		-{{ pol.rep_district }}
 		      	{% endif %}
 		      </td>
-		      <td>
-		      	<button class="subscribe-btn-subscriptions btn btn-sm btn-danger" data-pol-id-subscriptions="{{ pol.id }}"><i class="fa fa-check-square"></i></button>
+		      <td class="center-col vert-align">
+		      	<button class="subscribe-btn-subscriptions btn btn-sm btn-info" data-pol-id-subscriptions="{{ pol.id }}"><i class=" glyphicon glyphicon-eye-close"></i></button>
 		      </td>
 		    </tr>
 		    {% endfor %}

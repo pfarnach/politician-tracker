@@ -2,8 +2,9 @@
 POLITICIAN PROFILE PAGE
 --------------------------*/
 
-#politician-profile .politician-name {
+#politician-profile #politician-name {
 	padding-left: 15px;
+	font-size: 3em;
 }
 
 #politician-profile #subscribe-btn {
@@ -70,8 +71,42 @@ POLITICIAN PROFILE PAGE
 	display: inline-block;
 }
 
+/*to center the three net worth boxes inside of panel */
+#politician-profile #net-worth {
+	height: 120px;
+	text-align: justify;
+}
+
+#politician-profile #net-worth-title {
+	display: inline-block;
+}
+
+#politician-profile #net-worth-tooltip {
+	margin-left: 7px;
+}
+
+#politician-profile #net-worth-tooltip > i{
+	color: white;
+}
+
+/*to center the three net worth boxes inside of panel */
+#politician-profile #net-worth .panel {
+	display: inline-block;
+}
+
+/*to center the three net worth boxes inside of panel */
+#politician-profile #net-worth:after {
+	content: '';
+	width: 100%;
+	display: inline-block;
+}
+
 #politician-profile #net-worth .panel-body {
-	font-size: .9em;
+	font-size: 1em;
+}
+
+#politician-profile #net-worth .panel-title {
+	text-align: center;
 }
 
 #politician-profile #money-wait {
@@ -125,7 +160,29 @@ REGISTRATION PAGES (/user/)
 	margin: 10px 0;
 }
 
+/*------------------------
+USER SUBSCRIPTIONS PAGE
+--------------------------*/
 
+#subscriptions table {
+	font-size: 1.1em;
+}
+
+#subscriptions .center-col {
+	text-align: center;
+}
+
+#subscriptions td button i {
+	font-size: 1.2em;
+}
+
+#subscriptions .table tbody>tr>td {
+    vertical-align: top;
+}
+
+#subscriptions .table tbody>tr>td.vert-align {
+    vertical-align: middle;
+}
 
 
 

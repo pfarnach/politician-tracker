@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from profiles.models import Politician, UserSubscription, UserProfile, CachedOpenSecrets
+from profiles.models import Politician, UserSubscription, UserProfile, CachedOpenSecrets, Article, ArticleVote
 # from profiles.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
@@ -10,12 +10,16 @@ from django.utils import timezone
 import datetime
 import math
 import us
+import json
 
 import apikeys
 import requests
 import urllib2
 import xml.etree.ElementTree as ET
 
+#
+# URL-called functions
+#
 
 # index of politicians
 def politician_index(request):
@@ -147,16 +151,42 @@ def get_money_info(request):
         time_diff = time_now - time_cached
 
         if time_diff > datetime.timedelta(days=1):
-            print "cache expired"
+            # print "cache expired"
+            old_cached = cached
+
+            # get new cache
             cached = cache_opensecrets(pol_id, pol)
             serialized_data = serializers.serialize("json", [cached])
+
+            # delete old cache
+            old_cached.delete()
             return HttpResponse(serialized_data, content_type='application/json')
         else:
-            print "cache still good"
+            # print "cache still good"
             serialized_data = serializers.serialize("json", [cached])
             return HttpResponse(serialized_data, content_type='application/json')
 
-# auxiliary function that queries Opensecrets API
+def get_articles(request):
+
+    context_dict = {}
+    context_dict['is_authenticated'] = request.user.is_authenticated()
+    pol = None
+
+    if request.method == "GET":
+        pol_id = request.GET['pol_id']
+
+    try:
+        articles = Article.objects.get(politician=pol_id)
+    except Article.DoesNotExist:
+        context_dict['articles'] = 'None'
+        return HttpResponse(json.dumps(context_dict))
+    
+
+#
+# Helper functions
+#
+
+# queries Opensecrets API
 def cache_opensecrets(pol_id, pol): 
 
     # OpenSecrets API parameters

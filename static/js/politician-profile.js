@@ -188,20 +188,39 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 
 		$scope.addArticleEnabled = false;
 		$scope.addedSuccess = false;
+		$scope.articles_present = false;
+		$scope.articles = []
 
 		var fetchArticles = function() {
 			$http.get('/profiles/get_articles/', {params: {pol_id: pol_id}})
 				.success(function(data, status, headers, config) {
 					console.log(data);
-					$scope.no_articles = data['articles'];
+
+					if (data['articles_present']) {
+						$scope.articles_present = true;
+						// send data to function to get put cleaned up and put into scope
+						generate_article_list(data['articles']);
+					} else {
+						$scope.articles_present = false;
+					}
+					// console.log(JSON.parse(data['articles'][0]['tags']));
 					$scope.is_authenticated = data['is_authenticated'];
 				})
 				.error(function(data, status, headers, config) {
 					console.log('AJAX request error');
 				});
-			};
+		};
 
 		fetchArticles();
+
+		var generate_article_list = function(articles) {
+			$scope.articles = []
+			for (var i = 0; i < articles.length; i++) {
+				articles[i]['tags'] = JSON.parse(articles[i]['tags']);
+				$scope.articles.push(articles[i]);
+			}
+			console.log($scope.articles);
+		};
 
 		$scope.enableAddArticle = function() {
 			$scope.addArticleEnabled = true;
@@ -209,7 +228,7 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 
 		$scope.disableAddArticle = function() {
 			$scope.resetAddArticle();
-		}
+		};
 
 		$scope.resetAddArticle = function() {
 			$scope.addArticleEnabled = false;
@@ -217,7 +236,7 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 			$scope.article.title = "";
 			$scope.article.tags = [];
 			$scope.articleForm.$setPristine();
-		}
+		};
 
 		// form validation source: http://codepen.io/sevilayha/pen/xFcdI?editors=101
 		$scope.addArticle = function() {
@@ -225,7 +244,7 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 				console.log($scope.article);
 
 				var article_data = angular.copy($scope.article);
-				article_data['pol'] = pol_id
+				article_data['pol'] = pol_id;
 				$scope.resetAddArticle();
 
 				$http.post('/profiles/post_article/', article_data)

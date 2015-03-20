@@ -104,9 +104,9 @@ class Article(models.Model):
 	politician = models.ForeignKey(Politician)
 	user = models.ForeignKey(User)
 	timestamp = models.DateTimeField(unique = False, null=True, blank=False)
-	title = models.CharField(max_length = 500, unique = False, null=False, blank=False)
-	url = models.URLField(max_length=1000, unique = False, null=False, blank=False)
-	tags = JSONField(max_length = 500, unique = False, default=None, blank=True, null=True)
+	title = models.CharField(max_length = 100, unique = False, null=False, blank=False)
+	url = models.URLField(max_length=500, unique = False, null=False, blank=False)
+	tags = models.CharField(max_length = 250, unique = False, default=None, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.title

@@ -1,11 +1,24 @@
 <div id="article-display" ng-controller="ArticleController">
-	<div ng-show="no_articles">
+	<div ng-hide="articles_present">
 		<h1>No one has submitted an article about this bum yet.</h1>
 		<hr>
 	</div>
 
+	<div ng-show="articles_present">
+		<h1>Check out these cool articles below</h1>
+		<div ng-repeat="article in articles" id="articles"class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title"><a ng-href="{{ article.url }}" class="article-title" target="_blank">{{ article.title }}</a></h3>
+		    <p>By ... on {{ article.timestamp_date }} at {{ article.timestamp_time }}</p>
+		    <div class="tag-wrapper">
+		   		<span ng-repeat="tag in article.tags" class="label label-danger">{{ tag }}</span>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
 	<div ng-show="is_authenticated">
-		<a id="add-article-btn" class="btn btn-danger btn-lrg" ng-hide="addArticleEnabled" ng-click="enableAddArticle()">Submit an article</a>
+		<a id="add-article-btn" class="btn btn-danger btn-lrg" ng-hide="addArticleEnabled" ng-click="enableAddArticle()"><span class="glyphicon glyphicon-plus-sign"></span> Article</a>
 
 		<!-- add form -->
 		<div class="row">
@@ -15,7 +28,7 @@
 				  <div class="modal-dialog">
 				    <div class="modal-content">
 				      <div class="modal-header alert-success">
-				        <button type="button" class="close" ng-click="disableAddArticle()" aria-hidden="true">X</button>
+				        <button type="button" class="close" ng-click="disableAddArticle()" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
 				        <h4 class="modal-title"><strong>Awesome!</strong> Your article was successfully submitted.</h4>
 				      </div> <!-- /modal-header -->
 				    </div> <!-- /modal-content -->
@@ -27,7 +40,7 @@
 				    <div class="modal-content">
 				    	<form id="add-article-form" name="articleForm" ng-submit="addArticle()" novalidate>
 					      <div class="modal-header">
-					        <button type="button" class="close" ng-click="disableAddArticle()" aria-hidden="true">X</button>
+					        <button type="button" class="close" ng-click="disableAddArticle()" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
 					        <h4 class="modal-title">Submit an Article</h4>
 					      </div>
 					      <div class="modal-body">
@@ -42,15 +55,15 @@
 
 									<!-- URL -->
 					        <div class="form-group" ng-class="{ 'has-error' : articleForm.url.$invalid && !articleForm.url.$pristine }">
-					          <label>URL</label>
-					          <input type="url" name="url" class="form-control" ng-model="article.url" placeholder="Enter a valid URL starting with 'http://'" required>
+					          <label>Article Link</label>
+					          <input type="url" name="url" class="form-control" ng-model="article.url" max-length="500" placeholder="Enter a valid URL starting with 'http://'" required>
 					          <p ng-show="articleForm.url.$invalid && !articleForm.url.$pristine" class="help-block">A valid URL is required.</p>
 					        </div>
 
 							    <!-- TAGS -->
 									<div class="form-group">
 								    <label>Tags <span id="tags-info">(max. 5)</span></label>
-								    <tags-input ng-model="article.tags" min-length="3" max-length="50" max-tags="5"></tags-input>
+								    <tags-input ng-model="article.tags" min-length="3" max-length="200" max-tags="5"></tags-input>
 									</div>
 					      </div> <!-- /modal-body -->
 					      <div class="modal-body">

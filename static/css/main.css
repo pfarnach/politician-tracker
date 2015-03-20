@@ -129,8 +129,21 @@ POLITICIAN PROFILE PAGE
 
 /*--------- REAL TALK TAB ----------*/
 #politician-profile #article-display #add-article-btn {
-	padding: 15px;
+	margin-top: 20px;
+	padding: 10px;
 	font-size: 1.4em;
+}
+
+#politician-profile #article-display #articles .article-title {
+	font-size: 1.5em;
+}
+
+#politician-profile #article-display #articles .tag-wrapper {
+	margin-top: 15px;
+}
+
+#politician-profile #article-display #articles .label {
+	margin-right: 5px;
 }
 
 #politician-profile #article-display #add-article-form {
@@ -146,7 +159,6 @@ POLITICIAN PROFILE PAGE
 }
 
 #politician-profile #article-display #add-article-form #tags-info {
-	font-family: ;
 	font-size: 0.8em;
 	color: grey;
 }
@@ -167,7 +179,7 @@ POLITICIAN PROFILE PAGE
 	margin-bottom: 20px;
 }
 
-/* so modal works correctly */
+/* so modals works correctly */
 #politician-profile #article-display .modal {
     display: block;
 }

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from profiles.models import Politician, UserSubscription, CachedOpenSecrets, Article, ArticleVote
+from profiles.models import Politician, UserSubscription, CachedOpenSecrets, Article, ArticleVote, User
 # from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
 from django.core import serializers # for AJAX response
@@ -163,31 +163,61 @@ def get_money_info(request):
             serialized_data = serializers.serialize("json", [cached])
             return HttpResponse(serialized_data, content_type='application/json')
 
-def get_articles(request):
+def get_articles(request):    
     context_dict = {}
     context_dict['is_authenticated'] = request.user.is_authenticated()
-    pol = None
 
     if request.method == "GET":
         pol_id = request.GET['pol_id']
 
-    try:
-        articles = Article.objects.get(politician=pol_id)
-    except Article.DoesNotExist:
-        context_dict['articles'] = 'None'
-        return HttpResponse(json.dumps(context_dict))
+        articles = Article.objects.filter(politician=pol_id)
+        article_list = []
+        for article in articles:
+            article_data = {'title': article.title,
+                            'url': article.url,
+                            'tags': article.tags,
+                            'timestamp_date': article.timestamp.strftime('%B %d, %Y'),
+                            'timestamp_time': article.timestamp.strftime('%X')[:-3]}
+            article_list.append(article_data)
+
+        context_dict['articles'] = article_list
+        if not articles:
+            context_dict['articles_present'] = False
+        else:
+            context_dict['articles_present'] = True
+        
+        return HttpResponse(json.dumps(context_dict), content_type='application/json')
+
+    else:
+        return HttpResponse("Must be a GET request")
 
 @login_required
 def post_article(request):
 
     if request.method == "POST":
         data = json.loads(request.body)
-        print data['url']
-        print data['title']
-        print data['tags']
-        print data['pol']
+        url = data['url']
+        title = data['title']
+        tags_raw = data['tags']
+        pol_id = data['pol']
+        pol = Politician.objects.get(id=pol_id)
+        user = request.user
 
-    return HttpResponse('lolcat')
+        # make list from array of objects that come from Angular
+        tags = []
+        for tag in tags_raw:
+            print tag['text']
+            tags.append(tag['text'])
+        print tags
+
+        article = Article(politician=pol, user=user, timestamp=datetime.datetime.now(), title=title, url=url, tags=json.dumps(tags))
+        article.save()
+        print article.tags
+        print type(article.tags)
+
+        return HttpResponse('A successful POST request')
+
+    return HttpResponse('not a POST request')
 
 
 #

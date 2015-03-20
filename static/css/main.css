@@ -54,7 +54,7 @@ POLITICIAN PROFILE PAGE
 	color: #F04124;
 }
 
-/*--------- Main info tabs ----------*/
+/*--------- MONEY TAB ----------*/
 #politician-profile .row.money-info {
 	margin-top: 20px;
 }
@@ -125,6 +125,71 @@ POLITICIAN PROFILE PAGE
 
 #politician-profile .money-fade-in {
 	opacity: 1;
+}
+
+/*--------- REAL TALK TAB ----------*/
+#politician-profile #article-display #add-article-btn {
+	padding: 15px;
+	font-size: 1.4em;
+}
+
+#politician-profile #article-display #add-article-form {
+	margin-top: 15px;
+}
+
+#politician-profile #article-display #add-article-form i {
+	color: white;
+}
+
+#politician-profile #article-display #add-article-form label {
+	font-size: 1.2em;
+}
+
+#politician-profile #article-display #add-article-form #tags-info {
+	font-family: ;
+	font-size: 0.8em;
+	color: grey;
+}
+
+#politician-profile #article-display #add-article-form .tag-item {
+	border-radius: 0;
+	background: #f04124;
+	color: white;
+}
+
+#politician-profile #article-display #add-article-form .tag-item a {
+	color: white;
+	text-decoration: none;
+}
+
+#politician-profile #article-display #article-success-alert {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+/* so modal works correctly */
+#politician-profile #article-display .modal {
+    display: block;
+}
+
+#politician-profile #article-display .modal-dialog {
+    margin-top: 10%;
+}
+
+#politician-profile #article-display .modal-body:before,
+#politician-profile #article-display .modal-body:after {
+    display: table;
+    content: " ";
+}
+#politician-profile #article-display .modal-header:before,
+#politician-profile #article-display .modal-header:after {
+    display: table;
+    content: " ";
+}
+
+#politician-profile #article-display #article-success-alert .modal-header,
+#politician-profile #article-display #article-success-alert .modal-content {
+    border: 0;
 }
 
 /*------------------------

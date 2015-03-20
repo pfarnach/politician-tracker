@@ -82,10 +82,13 @@ $(document).ready(function(){
 // Angular.js widgets
 // -----------------------
 
-angular.module('PoliticianProfile', [])
-	.config(function($interpolateProvider) {
+angular.module('PoliticianProfile', ['ngTagsInput'])
+
+	.config(function($interpolateProvider, $httpProvider) {
 		$interpolateProvider.startSymbol('{[{');
 		$interpolateProvider.endSymbol('}]}');
+		$httpProvider.defaults.xsrfCookieName = 'csrftoken';
+		$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 	})
 
 	.directive('moneyInfo', function () {
@@ -98,10 +101,8 @@ angular.module('PoliticianProfile', [])
 	.directive('tooltip', function() {
 		return {
 			restrict: 'A',
-			link: $('[data-toggle="tooltip"]').tooltip({
-        			placement : 'top'
-    			})
-		}
+			link: $('[data-toggle="tooltip"]').tooltip({ placement : 'top' })
+		};
 	})
 
 	.controller('MoneyController', function($scope, $http) {
@@ -185,8 +186,10 @@ angular.module('PoliticianProfile', [])
 
 	.controller('ArticleController', function($scope, $http) {
 
+		$scope.addArticleEnabled = false;
+		$scope.addedSuccess = false;
+
 		var fetchArticles = function() {
-			console.log('ajax request made');
 			$http.get('/profiles/get_articles/', {params: {pol_id: pol_id}})
 				.success(function(data, status, headers, config) {
 					console.log(data);
@@ -199,7 +202,40 @@ angular.module('PoliticianProfile', [])
 			};
 
 		fetchArticles();
+
+		$scope.enableAddArticle = function() {
+			$scope.addArticleEnabled = true;
+		};
+
+		$scope.disableAddArticle = function() {
+			$scope.resetAddArticle();
+		}
+
+		$scope.resetAddArticle = function() {
+			$scope.addArticleEnabled = false;
+			$scope.article.url = "";
+			$scope.article.title = "";
+			$scope.article.tags = [];
+			$scope.articleForm.$setPristine();
+		}
+
+		// form validation source: http://codepen.io/sevilayha/pen/xFcdI?editors=101
+		$scope.addArticle = function() {
+			if ($scope.articleForm.$valid) {
+				console.log($scope.article);
+
+				var article_data = angular.copy($scope.article);
+				article_data['pol'] = pol_id
+				$scope.resetAddArticle();
+
+				$http.post('/profiles/post_article/', article_data)
+					.success(function(data) {
+						console.log(data);
+						$scope.addedSuccess = true;
+					})
+					.error(function(data){
+						console.log('Error posting article info');
+					});
+			}
+		};
 	});
-
-
-

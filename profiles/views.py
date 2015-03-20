@@ -1,15 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from profiles.models import Politician, UserSubscription, UserProfile, CachedOpenSecrets, Article, ArticleVote
-# from profiles.forms import CategoryForm, PageForm, UserForm, UserProfileForm
-from django.contrib.auth import authenticate, login, logout
+from profiles.models import Politician, UserSubscription, CachedOpenSecrets, Article, ArticleVote
+# from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required # for decorator
 from django.core import serializers # for AJAX response
 
 from django.utils import timezone
 import datetime
 import math
-import us
 import json
 
 import apikeys
@@ -43,8 +41,7 @@ def politician_profile(request, politician_name_slug):
 
         politician.address = politician.address.replace(';','</br>')
 
-        politician.state = us.states.lookup(politician.state).name
-
+        # returns default profile image if none exists
         if not politician.getImageURL() and politician.gender == "M":
             context_dict['alt_profile_pic'] = "male"
         elif not politician.getImageURL() and politician.gender == "F":
@@ -167,7 +164,6 @@ def get_money_info(request):
             return HttpResponse(serialized_data, content_type='application/json')
 
 def get_articles(request):
-
     context_dict = {}
     context_dict['is_authenticated'] = request.user.is_authenticated()
     pol = None
@@ -180,7 +176,19 @@ def get_articles(request):
     except Article.DoesNotExist:
         context_dict['articles'] = 'None'
         return HttpResponse(json.dumps(context_dict))
-    
+
+@login_required
+def post_article(request):
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        print data['url']
+        print data['title']
+        print data['tags']
+        print data['pol']
+
+    return HttpResponse('lolcat')
+
 
 #
 # Helper functions

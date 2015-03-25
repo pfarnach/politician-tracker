@@ -189,7 +189,7 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 		$scope.addArticleEnabled = false;
 		$scope.addedSuccess = false;
 		$scope.articles_present = false;
-		$scope.articles = []
+		$scope.articles = [];
 
 		var fetchArticles = function() {
 			$http.get('/profiles/get_articles/', {params: {pol_id: pol_id}})
@@ -214,7 +214,7 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 		fetchArticles();
 
 		var generate_article_list = function(articles) {
-			$scope.articles = []
+			$scope.articles = [];
 			for (var i = 0; i < articles.length; i++) {
 				articles[i]['tags'] = JSON.parse(articles[i]['tags']);
 				$scope.articles.push(articles[i]);

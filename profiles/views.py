@@ -177,7 +177,8 @@ def get_articles(request):
                             'url': article.url,
                             'tags': article.tags,
                             'timestamp_date': article.timestamp.strftime('%B %d, %Y'),
-                            'timestamp_time': article.timestamp.strftime('%X')[:-3]}
+                            'timestamp_time': article.timestamp.strftime('%X')[:-3],
+                            'user': article.user.username }
             article_list.append(article_data)
 
         context_dict['articles'] = article_list
@@ -207,7 +208,7 @@ def post_article(request):
         tags = []
         for tag in tags_raw:
             print tag['text']
-            tags.append(tag['text'])
+            tags.append(tag['text'].lower())
         print tags
 
         article = Article(politician=pol, user=user, timestamp=datetime.datetime.now(), title=title, url=url, tags=json.dumps(tags))

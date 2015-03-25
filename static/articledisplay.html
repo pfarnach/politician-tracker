@@ -8,10 +8,20 @@
 		<h1>Check out these cool articles below</h1>
 		<div ng-repeat="article in articles" id="articles"class="panel panel-info">
 		  <div class="panel-heading">
-		    <h3 class="panel-title"><a ng-href="{{ article.url }}" class="article-title" target="_blank">{{ article.title }}</a></h3>
-		    <p>By ... on {{ article.timestamp_date }} at {{ article.timestamp_time }}</p>
-		    <div class="tag-wrapper">
-		   		<span ng-repeat="tag in article.tags" class="label label-danger">{{ tag }}</span>
+		  	<div class="row">
+		  		<div class="col-md-1">
+		  			<div id="article-vote">
+			  			<p class="vote-outline"><a href="#"><i class="fa fa-chevron-up"></i></a></p>
+			  			<p class="vote-outline"><a href="#"><i class="fa fa-chevron-down"></i></a></p>
+		  			</div>
+		  		</div>
+		  		<div class="col-md-11">
+				    <h3 class="panel-title"><a ng-href="{{ article.url }}" class="article-title" target="_blank">{{ article.title }}</a></h3>
+				    <p>By {{ article.user }} on {{ article.timestamp_date }} at {{ article.timestamp_time }}</p>
+				    <div class="tag-wrapper">
+				   		<span ng-repeat="tag in article.tags" id="article-tag" class="label label-danger">{{ tag }}</span>
+				    </div>
+			    </div>
 		    </div>
 		  </div>
 		</div>

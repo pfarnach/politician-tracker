@@ -257,4 +257,12 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 					});
 			}
 		};
+
+		$scope.toggleVote = function(article_id, type) {
+			if (type === "up") {
+				console.log(article_id + " up");
+			} else if (type === "down") {
+				console.log(article_id + " down");
+			}
+		};
 	});

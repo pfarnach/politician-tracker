@@ -172,16 +172,48 @@ def get_articles(request):
 
         articles = Article.objects.filter(politician=pol_id)
         article_list = []
+
+        # build list of article dictionaries
         for article in articles:
+
+            # article vote count
+            votes = ArticleVote.objects.filter(article=article.id)
+            if votes:
+                upvotes = votes.vote.count('up')
+                downvotes = votes.vote.count('down')
+                vote_count = upvotes - downvotes
+            else:
+                vote_count = 0
+
+            # current user vote status
+            user_upvote = False
+            user_downvote = False
+
+            try:
+                vote = ArticleVote.objects.get(article=article.id, user=request.user.id)
+                if vote.vote == 'up':
+                    user_upvote = True
+                elif vote.vote == 'down':
+                    user_downvote = True
+            except ArticleVote.DoesNotExist:
+                pass
+
+            # article content    
             article_data = {'title': article.title,
                             'url': article.url,
                             'tags': article.tags,
+                            'id': article.id,
                             'timestamp_date': article.timestamp.strftime('%B %d, %Y'),
                             'timestamp_time': article.timestamp.strftime('%X')[:-3],
-                            'user': article.user.username }
+                            'user': article.user.username,
+                            'vote_count': vote_count,
+                            'user_upvote': user_upvote,
+                            'user_downvote': user_downvote }
+
             article_list.append(article_data)
 
         context_dict['articles'] = article_list
+
         if not articles:
             context_dict['articles_present'] = False
         else:

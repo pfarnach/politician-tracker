@@ -11,11 +11,14 @@
 		  	<div class="row">
 		  		<div class="col-md-1">
 		  			<div id="article-vote">
-			  			<p class="vote-outline"><a href="#"><i class="fa fa-chevron-up"></i></a></p>
-			  			<p class="vote-outline"><a href="#"><i class="fa fa-chevron-down"></i></a></p>
+			  			<p class="vote-outline" id="upvote" ng-click="toggleVote(article.id, 'up')"><a><i ng-class="{ 'article-upvote': article.user_upvote }" class="fa fa-chevron-up"></i></a></p>
+			  			<p class="vote-outline" id="downvote" ng-click="toggleVote(article.id, 'down')"><a><i ng-class="{ 'article-downvote': article.user_downvote }" class="fa fa-chevron-down"></i></a></p>
 		  			</div>
 		  		</div>
-		  		<div class="col-md-11">
+		  		<div class="col-md-1" id="article-vote-count">
+		  			<h3>{{ article.vote_count }}</h3>
+		  		</div>
+		  		<div class="col-md-10">
 				    <h3 class="panel-title"><a ng-href="{{ article.url }}" class="article-title" target="_blank">{{ article.title }}</a></h3>
 				    <p>By {{ article.user }} on {{ article.timestamp_date }} at {{ article.timestamp_time }}</p>
 				    <div class="tag-wrapper">

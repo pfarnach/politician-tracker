@@ -11,8 +11,8 @@
 		  	<div class="row">
 		  		<div class="col-md-1">
 		  			<div id="article-vote">
-			  			<p class="vote-outline" id="upvote" ng-click="toggleVote(article, 'up')"><a><i ng-class="{ 'article-upvote': article.user_upvote }" class="fa fa-chevron-up"></i></a></p>
-			  			<p class="vote-outline" id="downvote" ng-click="toggleVote(article, 'down')"><a><i ng-class="{ 'article-downvote': article.user_downvote }" class="fa fa-chevron-down"></i></a></p>
+			  			<p class="vote-outline" ng-click="toggleVote(article, 'up')"><a><i ng-class="{ 'article-upvote': article.user_upvote }" class="fa fa-chevron-up"></i></a></p>
+			  			<p class="vote-outline" ng-click="toggleVote(article, 'down')"><a><i ng-class="{ 'article-downvote': article.user_downvote }" class="fa fa-chevron-down"></i></a></p>
 		  			</div>
 		  		</div>
 		  		<div class="col-md-1" id="article-vote-count">

@@ -194,8 +194,6 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 		var fetchArticles = function() {
 			$http.get('/profiles/get_articles/', {params: {pol_id: pol_id}})
 				.success(function(data, status, headers, config) {
-					console.log(data);
-
 					if (data['articles_present']) {
 						$scope.articles_present = true;
 						// send data to function to get put cleaned up and put into scope
@@ -216,10 +214,12 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 		var generate_article_list = function(articles) {
 			$scope.articles = [];
 			for (var i = 0; i < articles.length; i++) {
+				// append "+" if vote count greater than 0
+				articles[i]['vote_count'] = articles[i]['vote_count'] > 0 ? "+" + articles[i]['vote_count'] : articles[i]['vote_count'];
+				// parse 'tags' array
 				articles[i]['tags'] = JSON.parse(articles[i]['tags']);
 				$scope.articles.push(articles[i]);
 			}
-			console.log($scope.articles);
 		};
 
 		$scope.enableAddArticle = function() {
@@ -260,29 +260,38 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 
 		// deal with upvote/downvotes on articles
 		$scope.toggleVote = function(article, type) {
+			console.log(type);
+			console.log(article.user_upvote);
+			console.log(article.user_downvote);
 			if (type === "up" && article.user_upvote) {
-				updateVote(article.id, false, false);
-			} else if (type === "up" && !article.user_downvote) {
-				updateVote(article.id, true, false);
+				updateVoteAjax(article, false, false);
+			} else if (type === "up" && !article.user_upvote) {
+				updateVoteAjax(article, true, false);
 			} else if (type === "down" && article.user_downvote) {
-				updateVote(article.id, false, false);
+				updateVoteAjax(article, false, false);
 			} else if (type === "down" && !article.user_downvote) {
-				updateVote(article.id, false, true);
+				updateVoteAjax(article, false, true);
 			}
 		};
 
-		function updateVote(article_id, upvote, downvote) {
-			vote_data = {upvote: upvote, downvote: downvote, article_id: article_id};
-			console.log(vote_data);
+		function updateVoteAjax(article, upvote, downvote) {
+			vote_data = {upvote: upvote, downvote: downvote, article_id: article.id};
 			$http.post('/profiles/article_vote/', vote_data)
 				.success(function(data) {
-					var new_count = +data;
-					$scope.article.vote_count = new_count;
-					$scope.article.upvote = upvote;
-					$scope.article.downvote = downvote;
+					var article_index = $scope.articles.indexOf(article);  // get index of article being voted on by user
+					var new_count = +data;  // data sent back is updated vote count
+					updateVoteView(article_index, new_count, upvote, downvote);
 				})
 				.error(function(data){
 					console.log("Error updating vote info.");
 				});
+		}
+
+		function updateVoteView(i, new_count, upvote, downvote) {
+			// if count is > 0, append '+'
+			new_count = new_count > 0 ? "+" + new_count : new_count;
+			$scope.articles[i].vote_count = new_count;
+			$scope.articles[i].user_upvote = upvote;
+			$scope.articles[i].user_downvote = downvote;
 		}
 	});

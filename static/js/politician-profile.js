@@ -258,11 +258,31 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 			}
 		};
 
-		$scope.toggleVote = function(article_id, type) {
-			if (type === "up") {
-				console.log(article_id + " up");
-			} else if (type === "down") {
-				console.log(article_id + " down");
+		// deal with upvote/downvotes on articles
+		$scope.toggleVote = function(article, type) {
+			if (type === "up" && article.user_upvote) {
+				updateVote(article.id, false, false);
+			} else if (type === "up" && !article.user_downvote) {
+				updateVote(article.id, true, false);
+			} else if (type === "down" && article.user_downvote) {
+				updateVote(article.id, false, false);
+			} else if (type === "down" && !article.user_downvote) {
+				updateVote(article.id, false, true);
 			}
 		};
+
+		function updateVote(article_id, upvote, downvote) {
+			vote_data = {upvote: upvote, downvote: downvote, article_id: article_id};
+			console.log(vote_data);
+			$http.post('/profiles/article_vote/', vote_data)
+				.success(function(data) {
+					var new_count = +data;
+					$scope.article.vote_count = new_count;
+					$scope.article.upvote = upvote;
+					$scope.article.downvote = downvote;
+				})
+				.error(function(data){
+					console.log("Error updating vote info.");
+				});
+		}
 	});

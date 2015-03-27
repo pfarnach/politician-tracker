@@ -179,8 +179,8 @@ def get_articles(request):
             # article vote count
             votes = ArticleVote.objects.filter(article=article.id)
             if votes:
-                upvotes = votes.vote.count('up')
-                downvotes = votes.vote.count('down')
+                upvotes = sum(1 for v in votes if v.vote == "up")
+                downvotes = sum(1 for v in votes if v.vote == "down")
                 vote_count = upvotes - downvotes
             else:
                 vote_count = 0
@@ -252,10 +252,53 @@ def post_article(request):
 
     return HttpResponse('not a POST request')
 
+@login_required
+def article_vote(request):
+
+    if request.method == "POST":
+        data = json.loads(request.body)
+        article_id = data['article_id']
+        article = Article.objects.get(id=article_id)
+        upvote = data['upvote']
+        downvote = data['downvote']
+
+        if upvote and not downvote:
+            vote_type = "up"
+        elif not upvote and downvote:
+            vote_type = "down"
+        else:
+            vote_type = None
+
+        try:
+            # see if user-article vote exists -- if it does, update the vote
+            vote = ArticleVote.objects.get(article=article_id, user=request.user.id)
+            vote.vote = vote_type
+            vote.save()
+            # update article's vote count
+            vote_count = article_vote_count(article_id)
+            return HttpResponse(vote_count)
+
+        except ArticleVote.DoesNotExist:
+            # if no vote for this user-article combo exists, create a new one
+            vote = ArticleVote(user=request.user, article=article, timestamp=timezone.now(), vote=vote_type)
+            vote.save()
+            # update article's vote count
+            vote_count = article_vote_count(article_id)
+            return HttpResponse(vote_count)
+
+    return HttpResponse('not a POST request')
+
 
 #
 # Helper functions
 #
+
+# get number of votes on a particular order
+def article_vote_count(article_id):
+    votes = ArticleVote.objects.filter(article=article_id)
+    upvotes = sum(1 for v in votes if v.vote == "up")
+    downvotes = sum(1 for v in votes if v.vote == "down")
+    return upvotes - downvotes
 
 # queries Opensecrets API
 def cache_opensecrets(pol_id, pol): 
@@ -319,6 +362,3 @@ def cache_opensecrets(pol_id, pol):
     cached = CachedOpenSecrets(politician=pol, timestamp=timezone.now(), top_contributor=top_contributor, top_industry=top_industry, net_low=net_low, net_high=net_high)
     cached.save()
     return cached
-
-
-

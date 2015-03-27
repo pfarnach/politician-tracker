@@ -196,10 +196,10 @@ POLITICIAN PROFILE PAGE
 #politician-profile #article-display #article-vote .fa-chevron-up::after {
 	content:'';
 	position: absolute;
-	width: 15px;
+	width: 16px;
 	height: 2px;
 	top: 21px;
-	right: 0;
+	right: -1px;
 	background-color: rgba(51, 51, 51, 0.2);
 }
 

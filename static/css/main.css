@@ -265,6 +265,16 @@ POLITICIAN PROFILE PAGE
     border: 0;
 }
 
+/* loading icon */
+#politician-profile #article-wait {
+	width: 15%;
+	display: block;
+	position: absolute;
+	top: 200px;
+	left: 40%;
+	margin: 0 auto;
+}
+
 /*------------------------
 REGISTRATION PAGES (/user/)
 --------------------------*/

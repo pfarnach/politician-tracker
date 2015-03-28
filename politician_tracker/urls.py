@@ -4,9 +4,11 @@ from django.contrib import admin
 from django.conf import settings
 from registration.backends.simple.views import RegistrationView
 from django.views.generic import TemplateView
+from home import views as homeviews
 
 urlpatterns = patterns('',
 	url(r'^$', include('home.urls')),
+    url(r'^about/', homeviews.about, name="about"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^static/', TemplateView.as_view(template_name='moneyinfo.html')),
     url(r'^profiles/', include('profiles.urls')),

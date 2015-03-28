@@ -189,7 +189,9 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 		$scope.addArticleEnabled = false;
 		$scope.addedSuccess = false;
 		$scope.articles_present = false;
+		$scope.articles_loaded = false;
 		$scope.articles = [];
+		$scope.fade = false;
 
 		var fetchArticles = function() {
 			$http.get('/profiles/get_articles/', {params: {pol_id: pol_id}})
@@ -203,6 +205,8 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 					}
 					// console.log(JSON.parse(data['articles'][0]['tags']));
 					$scope.is_authenticated = data['is_authenticated'];
+					$scope.articles_loaded = true;
+					$scope.fade = true;
 				})
 				.error(function(data, status, headers, config) {
 					console.log('AJAX request error');
@@ -260,17 +264,16 @@ angular.module('PoliticianProfile', ['ngTagsInput'])
 
 		// deal with upvote/downvotes on articles
 		$scope.toggleVote = function(article, type) {
-			console.log(type);
-			console.log(article.user_upvote);
-			console.log(article.user_downvote);
-			if (type === "up" && article.user_upvote) {
-				updateVoteAjax(article, false, false);
-			} else if (type === "up" && !article.user_upvote) {
-				updateVoteAjax(article, true, false);
-			} else if (type === "down" && article.user_downvote) {
-				updateVoteAjax(article, false, false);
-			} else if (type === "down" && !article.user_downvote) {
-				updateVoteAjax(article, false, true);
+			if ($scope.is_authenticated) {
+				if (type === "up" && article.user_upvote) {
+					updateVoteAjax(article, false, false);
+				} else if (type === "up" && !article.user_upvote) {
+					updateVoteAjax(article, true, false);
+				} else if (type === "down" && article.user_downvote) {
+					updateVoteAjax(article, false, false);
+				} else if (type === "down" && !article.user_downvote) {
+					updateVoteAjax(article, false, true);
+				}
 			}
 		};
 

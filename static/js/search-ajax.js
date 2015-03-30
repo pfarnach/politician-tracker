@@ -6,7 +6,6 @@ $(document).ready(function(){
 	if (politician_list.length === 0) {
 		$.get('/profiles/search_list/', function(data) {
 			unpack_politician_list(data);
-			console.log('list loaded');
 		});
 	}
 

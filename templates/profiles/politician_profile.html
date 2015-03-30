@@ -120,16 +120,16 @@
 <!-- Main info block -->
 <div class="col-md-9">
 	<ul class="nav nav-tabs">
-	  <li><a href="#money" data-toggle="tab">Money</a></li>
-	  <li class="active"><a href="#real-talk" data-toggle="tab">Real Talk</a></li>
-	  <li><a href="#activity" data-toggle="tab">Political activity</a></li>
-	  <li><a href="#rss" data-toggle="tab">RSS Feed</a></li>
+	  <li class="active"><a href="#money" data-toggle="tab">Money</a></li>
+	  <li><a href="#real-talk" data-toggle="tab">Real Talk</a></li>
+	  <li class="disabled"><a href="#activity" data-toggle="tab">Political activity</a></li>
+	  <li class="disabled"><a href="#rss" data-toggle="tab">RSS Feed</a></li>
 	</ul>
 	<div id="myTabContent" class="tab-content">
-	  <div class="tab-pane fade" id="money">
+	  <div class="tab-pane fade active in" id="money">
 	  	<money-info></money-info> <!-- angular.js custom element directive -->
 	  </div>
-	  <div class="tab-pane fade active in" id="real-talk">
+	  <div class="tab-pane fade" id="real-talk">
 	    <article-display></article-display>
 	  </div>
 	  <div class="tab-pane fade" id="activity">

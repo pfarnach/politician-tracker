@@ -3,6 +3,7 @@
 *.pyc
 *.psd
 politician_tracker/settings.py
-data/congressapi.py
 data
 profiles/apikeys.py
+Procfile
+runtime.txt

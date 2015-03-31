@@ -212,7 +212,8 @@ def get_articles(request):
 
             article_list.append(article_data)
 
-        context_dict['articles'] = article_list
+        article_list = sorted(article_list, key=lambda x:x['vote_count'])
+        context_dict['articles'] = article_list[::-1]
 
         if not articles:
             context_dict['articles_present'] = False
